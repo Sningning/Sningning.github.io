@@ -101,3 +101,12 @@ deploy:
   type: git
   repo: https://github.com/Sningning/Sningning.github.io.git
   branch: master
+
+githubEmojis:
+  enable: true
+  className: github-emoji
+  unicode: true
+  styles:
+    display: inline
+    vertical-align: middle 
+  localEmojis:
