@@ -5,15 +5,16 @@
 # Site
 title: 菜鸟小宋
 subtitle: ''
-description: ''
+description: '己所不欲 勿施于人'
 keywords:
 author: Song Ningning
-language: en
+language: zh-CN
 timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+#url: http://yoursite.com
+url: https://sningning.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -110,3 +111,11 @@ githubEmojis:
     display: inline
     vertical-align: middle 
   localEmojis:
+  
+# 表示站内搜索
+search:
+    path: search.xml
+    field: post
+    format: html
+    limit: 10000  
+ 
