@@ -118,4 +118,10 @@ search:
     field: post
     format: html
     limit: 10000  
- 
+    
+# 设置主页文章折叠
+excerpt:
+  depth: 10
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true 
