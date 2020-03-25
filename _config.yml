@@ -13,7 +13,6 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-#url: http://yoursite.com
 url: https://sningning.github.io
 root: /
 permalink: :year/:month/:day/:title/
@@ -59,7 +58,7 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 10
+  per_page: 6
   order_by: -date
 
 # Category & Tag
@@ -119,9 +118,3 @@ search:
     format: html
     limit: 10000  
     
-# 设置主页文章折叠
-excerpt:
-  depth: 10
-  excerpt_excludes: []
-  more_excludes: []
-  hideWholePostExcerpts: true 
