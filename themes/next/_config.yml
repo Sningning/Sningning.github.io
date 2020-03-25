@@ -400,8 +400,8 @@ bookmark:
 
 # `Follow me on GitHub` banner in the top-right corner.
 github_banner:
-  enable: false
-  permalink: https://github.com/yourname
+  enable: ture
+  permalink: https://github.com/Sningning
   title: Follow me on GitHub
 
 
@@ -457,7 +457,7 @@ font:
   # Font settings for <code> and code blocks.
   codes:
     external: true
-    family: PT Mono
+    family: Fira Mono
 
 
 # ---------------------------------------------------------------
@@ -520,7 +520,7 @@ math:
 
   # hexo-renderer-pandoc (or hexo-renderer-kramed) required for full MathJax support.
   mathjax:
-    enable: false
+    enable: true
     # See: https://mhchem.github.io/MathJax-mhchem/
     mhchem: false
 
@@ -842,7 +842,7 @@ mermaid:
 # Use velocity to animate everything.
 # For more information: http://velocityjs.org
 motion:
-  enable: true
+  enable: false
   async: false
   transition:
     # Transition variants:
@@ -882,8 +882,8 @@ three:
 # For more information: https://github.com/zproo/canvas-ribbon
 canvas_ribbon:
   enable: false
-  size: 300 # The width of the ribbon
-  alpha: 0.6 # The transparency of the ribbon
+  size: 90 # The width of the ribbon 宽度
+  alpha: 0.6 # The transparency of the ribbon 透明度
   zIndex: -1 # The display level of the ribbon
 
 
@@ -910,7 +910,7 @@ vendors:
   # fontawesome:
 
   # MathJax
-  # mathjax: //cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  mathjax: //cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   # mathjax:
 
   # KaTeX
@@ -1003,9 +1003,9 @@ vendors:
 
   # Internal version: 1.0.0
   three: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js
-  three_waves: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js
-  canvas_lines: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js
-  canvas_sphere: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_sphere.min.js
+  three_waves: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@latest/three-waves.min.js
+  canvas_lines: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@latest/canvas_lines.min.js
+  canvas_sphere: //cdn.jsdelivr.net/gh/theme-next/theme-next-three@latest/canvas_sphere.min.js
   # three:
   # three_waves:
   # canvas_lines:
