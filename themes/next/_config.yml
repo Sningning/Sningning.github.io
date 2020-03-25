@@ -261,8 +261,8 @@ post_meta:
 # Dependencies: https://github.com/theme-next/hexo-symbols-count-time
 symbols_count_time:
   separated_meta: true
-  item_text_post: true
-  item_text_total: false
+  item_text_post: true    # 文章中的显示是否显示文字（本文字数|阅读时长）
+  item_text_total: false  # 网页底部的显示是否显示文字（站点总字数|站点阅读时长）
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
 tag_icon: false
@@ -419,10 +419,12 @@ github_banner:
 # ---------------------------------------------------------------
 
 font:
-  enable: false
-
+  enable: true
+  
+  # 外链字体库地址，例如 http://fonts.googleapis.com (默认值)
   # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).
-  host:
+  # fonts.lug.ustc.edu.cn是中科大的源,解决Hexo NexT主题访问慢
+  host: https://fonts.lug.ustc.edu.cn
 
   # Font options:
   # `external: true` will load this font family from `host` above.
@@ -433,7 +435,7 @@ font:
   global:
     external: true
     family: Lato
-    size:
+    size: 
 
   # Font settings for site title (.site-title).
   title:
@@ -455,7 +457,7 @@ font:
   # Font settings for <code> and code blocks.
   codes:
     external: true
-    family:
+    family: Fira Code
 
 
 # ---------------------------------------------------------------
