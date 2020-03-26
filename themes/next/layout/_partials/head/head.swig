@@ -2,6 +2,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="{{ theme.android_chrome_color }}">
 <meta name="generator" content="Hexo {{ hexo_version }}">
+<meta name="baidu-site-verification" content="jrFWF6ybrX" />
+<meta name="google-site-verification" content="pFsBfeKIAL6_5hJXpfcJ9hnJveKoB1Bx53OvTyaW8vU" />
 
 {%- if theme.favicon.apple_touch_icon %}
   <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for(theme.favicon.apple_touch_icon) }}">
