@@ -1,14 +1,11 @@
 ---
 title: 自定义npm包的安装位置
-
-date: 2020-03-24
-
 tags:
-- 随笔
-
+  - 随笔
 categories:
-- 随笔
-
+  - 随笔
+abbrlink: 15d73520
+date: 2020-03-24 00:00:00
 ---
 
 nodejs 官网上下载的安装包中包含 npm，在 Windows 系统下安装完后，npm 下载模块默认安装在 `C:\Users\本机用户名\AppData\Roaming` 文件中。但在清理磁盘时容易将其清理掉，考虑将 npm 也安装在其他盘符。
