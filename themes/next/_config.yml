@@ -796,7 +796,7 @@ tidio:
 # DaoVoice Support  # 自己添加的 DaoVoice 实时聊天
 # See: http://www.daovoice.io/
 # Dashboard: http://dashboard.daovoice.io/
-daovoice: true
+daovoice: false
 daovoice_app_id: 94159e9b
 
 
