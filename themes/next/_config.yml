@@ -420,7 +420,7 @@ github_banner:
 
 font:
   enable: true
-  
+
   # 外链字体库地址，例如 http://fonts.googleapis.com (默认值)
   # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).
   # fonts.lug.ustc.edu.cn是中科大的源,解决Hexo NexT主题访问慢
@@ -435,7 +435,7 @@ font:
   global:
     external: true
     family: Lato
-    size: 
+    size:
 
   # Font settings for site title (.site-title).
   title:
@@ -484,11 +484,11 @@ exturl: false
 
 # Google Webmaster tools verification.
 # See: https://www.google.com/webmasters
-google-site-verification: true
+google_site_verification: true
 
 # Bing Webmaster tools verification.
 # See: https://www.bing.com/webmaster
-bing_site_verification:
+bing_site_verification: true
 
 # Yandex Webmaster tools verification.
 # See: https://webmaster.yandex.ru
@@ -496,7 +496,7 @@ yandex_site_verification:
 
 # Baidu Webmaster tools verification.
 # See: https://ziyuan.baidu.com/site
-baidu-site-verification: true
+baidu_site_verification: true
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO.
 baidu_push: true
@@ -629,17 +629,17 @@ changyan:
 # Valine
 # For more information: https://valine.js.org, https://github.com/xCss/Valine
 valine:
-  enable: false
-  appid: # Your leancloud application appid
-  appkey: # Your leancloud application appkey
+  enable: true
+  appid: pBbqtWKVEqWEt7mPeHsCoC3Q-gzGzoHsz
+  appkey: Tb92Uo4lbYgTBTGR2aWri46v
   notify: false # Mail notifier
   verify: false # Verification code
   placeholder: Just go go # Comment box placeholder
   avatar: mm # Gravatar style
-  guest_info: nick,mail,link # Custom comment header
+  guest_info: nick,mail # Custom comment header: nick,mail,link
   pageSize: 10 # Pagination size
-  language: # Language, available values: en, zh-cn
-  visitor: false # Article reading statistic
+  language: zh-cn # Language, available values: en, zh-cn
+  visitor: true # Article reading statistic 阅读量统计
   comment_count: true # If false, comment count will only be displayed in post page, not in home page
   recordIP: false # Whether to record the commenter IP
   serverURLs: # When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)
@@ -792,6 +792,12 @@ chatra:
 tidio:
   enable: false
   key: # Public Key, get it from dashboard. See: https://www.tidiochat.com/panel/settings/developer
+
+# DaoVoice Support  # 自己添加的 DaoVoice 实时聊天
+# See: http://www.daovoice.io/
+# Dashboard: http://dashboard.daovoice.io/
+daovoice: true
+daovoice_app_id: 94159e9b
 
 
 # ---------------------------------------------------------------
