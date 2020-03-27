@@ -12,6 +12,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <meta name="google-site-verification" content="true">
+  <meta name="msvalidate.01" content="true">
   <meta name="baidu-site-verification" content="true">
 
 <link rel="stylesheet" href="/css/main.css">
@@ -444,6 +445,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pBbqtWKVEqWEt7mPeHsCoC3Q-gzGzoHsz',
+      appKey     : 'Tb92Uo4lbYgTBTGR2aWri46v',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>
