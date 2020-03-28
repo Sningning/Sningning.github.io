@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+<meta name="baidu-site-verification" content="jrFWF6ybrX" />
+<meta name="google-site-verification" content="pFsBfeKIAL6_5hJXpfcJ9hnJveKoB1Bx53OvTyaW8vU" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="true">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="true">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.lug.ustc.edu.cn/css?family=Lato:300,300italic,400,400italic,700,700italic|Fira Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sningning.gitee.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+
+
+  <meta name="description" content="栈（Stack）是一种后入先出（Last In First Out, LIFO）的线性数据结构， 只能从一端添加或取出元素，进出元素的一端称为栈顶。队列（Queue）是一种先入先出（First In First Out, FIFO）的线性数据结构，只能从一端添加元素，从另一端取出元素，添加元素一端称为队尾，取出元素的一端称为队首。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构02-栈和队列">
+<meta property="og:url" content="https://sningning.gitee.io/posts/f9c8b94e/index.html">
+<meta property="og:site_name" content="菜鸟小宋">
+<meta property="og:description" content="栈（Stack）是一种后入先出（Last In First Out, LIFO）的线性数据结构， 只能从一端添加或取出元素，进出元素的一端称为栈顶。队列（Queue）是一种先入先出（First In First Out, FIFO）的线性数据结构，只能从一端添加元素，从另一端取出元素，添加元素一端称为队尾，取出元素的一端称为队首。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/stack.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/queue.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/dequeue1.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/dequeue2.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/LoopQueue.gif">
+<meta property="article:published_time" content="2020-03-28T06:22:42.000Z">
+<meta property="article:modified_time" content="2020-03-28T15:36:40.133Z">
+<meta property="article:author" content="Song Ningning">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/stack.gif">
+
+<link rel="canonical" href="https://sningning.gitee.io/posts/f9c8b94e/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>数据结构02-栈和队列 | 菜鸟小宋</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+    
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">菜鸟小宋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+      <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+  </div>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/Sningning" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sningning.gitee.io/posts/f9c8b94e/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/profile_pic.jpg">
+      <meta itemprop="name" content="Song Ningning">
+      <meta itemprop="description" content="己所不欲 勿施于人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸟小宋">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          数据结构02-栈和队列
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-28 14:22:42 / 修改时间：23:36:40" itemprop="dateCreated datePublished" datetime="2020-03-28T14:22:42+08:00">2020-03-28</time>
+            </span>
+
+          
+            <span id="/posts/f9c8b94e/" class="post-meta-item leancloud_visitors" data-flag-title="数据结构02-栈和队列" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">评论数：</span>
+    
+    <a title="valine" href="/posts/f9c8b94e/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/f9c8b94e/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>栈（Stack）</strong>是一种后入先出（Last In First Out, LIFO）的线性数据结构， 只能从一端添加或取出元素，进出元素的一端称为栈顶。<br><strong>队列（Queue）</strong>是一种先入先出（First In First Out, FIFO）的线性数据结构，只能从一端添加元素，从另一端取出元素，添加元素一端称为队尾，取出元素的一端称为队首。</p>
+<a id="more"></a>
+
+
+<h1 id="1-栈（Stack）"><a href="#1-栈（Stack）" class="headerlink" title="1.栈（Stack）"></a>1.栈（Stack）</h1><h2 id="1-1-栈的接口中定义的几个操作"><a href="#1-1-栈的接口中定义的几个操作" class="headerlink" title="1.1 栈的接口中定义的几个操作"></a>1.1 栈的接口中定义的几个操作</h2><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">获取栈中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">判断栈是否为空</td>
+</tr>
+<tr>
+<td align="center">void push(E e)</td>
+<td align="center">入栈，向栈中压入元素 e</td>
+</tr>
+<tr>
+<td align="center">E pop()</td>
+<td align="center">出栈，弹出栈顶元素</td>
+</tr>
+<tr>
+<td align="center">E peek()</td>
+<td align="center">查看栈顶元素</td>
+</tr>
+</tbody></table>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/stack.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取栈中元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断栈是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入栈，向栈中压入元素 e</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出栈，弹出栈顶元素</span></span><br><span class="line">    <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看栈顶元素</span></span><br><span class="line">    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="1-2-基于-Array-类的栈实现"><a href="#1-2-基于-Array-类的栈实现" class="headerlink" title="1.2 基于 Array 类的栈实现"></a>1.2 基于 Array 类的栈实现</h2><p>如果用之前实现的动态数组 Array 类来实现栈，很多方法可以直接复用。由于在数组的末尾添加元素和删除元素的复杂度为 O(1)，因此将数组的末尾作为栈顶。</p>
+<p>在实现栈中 <code>push(E e)</code> 和 <code>pop()</code> 方法时，根据后入先出的原则，分别复用 Array 中的 <code>addLast(E e)</code> 和 <code>removeLast()</code> 方法。<code>peek()</code> 操作只是查看栈顶元素，并非删除，因此复用 Array 类中的 <code>getLast()</code> 方法。</p>
+<p>另外再添加 <code>getCapacity()</code> 方法，返回当前栈的容量，具体实现是返回底层数组的容量。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayStack</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Array&lt;E&gt; array;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayStack</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;(capacity);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayStack</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> array.getCapacity();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getSize();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.isEmpty();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span> </span>{</span><br><span class="line">        array.addLast(e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">pop</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.removeLast();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">peek</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getLast();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>为了方便打印输出，重写一下 <code>toString()</code> 方法。数组栈的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/stacks" target="_blank" rel="noopener">ArrayStack.java</a></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Stack: "</span>);</span><br><span class="line">    res.append(<span class="string">'['</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">            res.append(array.get(i));</span><br><span class="line">            <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>)</span><br><span class="line">                res.append(<span class="string">", "</span>);</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] top"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="1-3-栈的复杂度分析"><a href="#1-3-栈的复杂度分析" class="headerlink" title="1.3 栈的复杂度分析"></a>1.3 栈的复杂度分析</h2><p>由于 <code>push(E e)</code> 和 <code>pop()</code> 操作都是在数组尾操作，因此时间复杂度是 <code>O(1)</code>，如果触发 <code>resize()</code> 操作，按照均摊复杂度分析，整个过程也是 <code>O(1)</code>。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">void push(E e)</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E pop()</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E peek()</td>
+<td align="center">O(1)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="2-队列（Queue）"><a href="#2-队列（Queue）" class="headerlink" title="2. 队列（Queue）"></a>2. 队列（Queue）</h1><h2 id="2-1-队列的接口中定义的几个操作"><a href="#2-1-队列的接口中定义的几个操作" class="headerlink" title="2.1 队列的接口中定义的几个操作"></a>2.1 队列的接口中定义的几个操作</h2><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void enqueue(E e)</td>
+<td align="center">入队，向队列中添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">E dequeue()</td>
+<td align="center">出队，从队列中删除元素</td>
+</tr>
+<tr>
+<td align="center">E getFront()</td>
+<td align="center">查看队首元素</td>
+</tr>
+<tr>
+<td align="center">int getSize()</td>
+<td align="center">获取队列中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">判断队列是否为空</td>
+</tr>
+</tbody></table>
+<br>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队，向队列中添加新元素 e</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队，从队列中删除元素</span></span><br><span class="line">    <span class="function">E <span class="title">dequeue</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function">E <span class="title">getFront</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取队列中元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/queue.gif" width=""> </div>
+
+<h2 id="2-2-基于-Array-类的队列实现"><a href="#2-2-基于-Array-类的队列实现" class="headerlink" title="2.2 基于 Array 类的队列实现"></a>2.2 基于 Array 类的队列实现</h2><p>还是用之前实现的动态数组 Array 类来实现队列，很多方法可以直接复用。</p>
+<p>在实现队列中 <code>enqueue(E e)</code> 和 <code>dequeue()</code> 方法时，根据先入先出的原则，分别复用 Array 中的 <code>addLast(E e)</code> 和 <code>removeFirst()</code> 方法。<code>getFront()</code> 操作只是查看队首元素，并非删除，因此复用 Array 类中的 <code>getFirst()</code> 方法。</p>
+<p>另外再添加 <code>getCapacity()</code> 方法，返回当前栈的容量，具体实现是返回底层数组的容量。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Array&lt;E&gt; array;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;(capacity);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayQueue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> array.getCapacity();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line">        array.addLast(e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.removeFirst();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">getFront</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getFirst();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getSize();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.isEmpty();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>为了方便打印输出，重写 <code>toString()</code> 方法。数组队列的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/queue" target="_blank" rel="noopener">ArrayQueue.java</a>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Queue: "</span>);</span><br><span class="line">    res.append(<span class="string">"front ["</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">        res.append(array.get(i));</span><br><span class="line">        <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] tail"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-3-队列的复杂度分析"><a href="#2-3-队列的复杂度分析" class="headerlink" title="2.3 队列的复杂度分析"></a>2.3 队列的复杂度分析</h2><p>由于 <code>enqueue(E e)</code> 操作是在数组尾操作，因此时间复杂度是 <code>O(1)</code>，如果触发 <code>resize()</code> 操作，按照均摊复杂度分析，入队过程也是 <code>O(1)</code>。</p>
+<p>但出队操作是在数组头部进行，底层复用动态数组类中 <code>removeFirst()</code> 方法，因此时间复杂度为 O(n)。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void enqueue(E e)</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E dequeue()</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">E getFront()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">int getSize()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">O(1)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="3-循环队列"><a href="#3-循环队列" class="headerlink" title="3. 循环队列"></a>3. 循环队列</h1><h2 id="3-1-循环队列介绍"><a href="#3-1-循环队列介绍" class="headerlink" title="3.1 循环队列介绍"></a>3.1 循环队列介绍</h2><p>之前用动态数组实现的队列，出队操作由于复用了动态数组中 <code>removeFirst()</code> 操作，删除第一个元素后，后面的元素需要向前依次移动，因此时间复杂度为 O(n)。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/dequeue1.gif" width=""> </div>
+
+<p>考虑出队后，其余元素不进行移动，这样就可以使出队的时间复杂度变为 <code>O(1)</code>。</p>
+<p>当删除数组第一个元素后，不进行后面元素的移动，而是用一个 <code>front</code> 变量记录下当前第一个元素的索引位置，即队首元素位置，同时用一个 <code>tail</code> 变量记录下最后一个元素的下一个索引位置，也是新元素入队时的索引位置。这样当删除数组第一个元素后，只需要维护 <code>front</code> 就可以。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/dequeue2.gif" width=""> </div>
+
+<p>循环队列的初始状态下，队列中没有元素，<code>front</code> 和 <code>tail</code> 均指向底层数组的第一个位置，因此当 <code>front == tail</code> 时，队列为空。</p>
+<p>进行入队操作时，只需维护 <code>tail</code>；如果进行出队操作，只需维护 <code>front</code>。</p>
+<p>当底层数组中最后一个位置存在元素，再进行入队操作时，<code>tail</code> 就无法进行简单的 <code>tail++</code> 操作，但是由于进行了出队操作，底层数组的前半部分是空闲的，如下图中所示，这时 <code>tail</code> 应该指向 <code>data[0]</code>，因此要实现这种循环的操作，<code>tail</code> 的维护应该变成 <code>tail = (tail + 1) % data.length</code>。</p>
+<p>当底层数组中 <code>tail + 1 == front</code>时，再添加元素，此时 <code>front == tail</code>，而前面定义这种情况是队列为空的判断条件，因此在这种情况下，选择不再添加元素，即判断队列为满的条件是  <code>tail + 1 == front</code>，但由于是循环队列，这个判断条件响应改为 <code>(tail + 1) % data.length == front</code>，如同钟表一样，11 点的下一个小时我们可以说是 12 点或者是 <code>0</code> 点，钟表中的 12 个刻度对应底层数组的长度 <code>data.length</code>。这时浪费了一个数组空间，因此当前队列所能存储最多的元素个数为 <code>data.length - 1</code>。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/LoopQueue.gif" width=""> </div>
+
+<h2 id="3-2-循环队列中简单方法的实现"><a href="#3-2-循环队列中简单方法的实现" class="headerlink" title="3.2 循环队列中简单方法的实现"></a>3.2 循环队列中简单方法的实现</h2><p>先进行 <code>LoopQueue</code> 类中简单操作的实现，由于实现方式不同，这里不再复用之前的 <code>Array</code> 动态数组类。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoopQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> E[] data;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> front, tail;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;   </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoopQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>{</span><br><span class="line">      </span><br><span class="line">        data = (E[])<span class="keyword">new</span> Object[capacity + <span class="number">1</span>];</span><br><span class="line">        front = <span class="number">0</span>;  <span class="comment">// 队列中第一个元素的索引</span></span><br><span class="line">        tail = <span class="number">0</span>;   <span class="comment">// 队列中最后一个元素的下一个索引</span></span><br><span class="line">        size = <span class="number">0</span>;   <span class="comment">// 队列中元素个数</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoopQueue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>(<span class="number">10</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> data.length - <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> front == tail;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后面实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后面实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后面实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">getFront</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-3-底层数组容量调整"><a href="#3-3-底层数组容量调整" class="headerlink" title="3.3 底层数组容量调整"></a>3.3 底层数组容量调整</h2><p>底层数组的容量调整和之前 <code>Array</code> 中 <code>resize(int newCapacity)</code> 方法类似。差别在于两个地方：遍历旧数组、维护 <code>front</code> 和 <code>tail</code>。</p>
+<p>为了保证元素的顺序，必须从 <code>front</code> 开始遍历旧的 <code>data</code> 数组时，但旧数组中 <code>front</code> 可能不为 <code>0</code>，即不能进行 <code>newData[i] = data[i]</code> 这种操作，这时 <code>data</code> 中元素相对于 <code>newData</code> 中元素的索引值存在 front 数量的偏移，同时由于是循环队列，有可能会产生越界，需要再对 <code>data.length</code> 进行取模。这里也有两种遍历方式。</p>
+<p>方式一：终止条件从 <code>size</code> 考虑。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">    newData[i] = data[(i + front) % data.length];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>方式二：终止条件从 <code>tail</code> 考虑。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = front ; i != tail ; i = (i + <span class="number">1</span>) % data.length) {</span><br><span class="line">    newData[(i - front) % data.length] = data[i];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>在容量调整后，<code>front</code> 重新指向了新数组索引为 <code>0</code> 的位置，<code>tail</code> 重新指向了新数组中索引为 <code>size</code> 的位置。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span> </span>{</span><br><span class="line"></span><br><span class="line">    E[] newData = (E[]) <span class="keyword">new</span> Object[newCapacity + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">        newData[i] = data[(i + front) % data.length];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    data = newData;</span><br><span class="line">    front = <span class="number">0</span>;</span><br><span class="line">    tail = size;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="3-4-循环队列入队、出队的实现"><a href="#3-4-循环队列入队、出队的实现" class="headerlink" title="3.4 循环队列入队、出队的实现"></a>3.4 循环队列入队、出队的实现</h2><p>循环队列底层数组的添加、删除和容量调整的方式和 <code>Array</code> 中的方法基本是相同的，差别主要在于维护 <code>front</code> 和 <code>tail</code> 变量时并不是简单加一，而是需要加一并取模数组长度。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (tail + <span class="number">1</span>) % data.length == front ) {</span><br><span class="line">        resize( getCapacity() * <span class="number">2</span> );</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    data[tail] = e;</span><br><span class="line">    tail = (tail + <span class="number">1</span>) % data.length;</span><br><span class="line">    size++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (isEmpty()) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"出队失败，队列为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E ret = data[front];</span><br><span class="line">    data[front] = <span class="keyword">null</span>;</span><br><span class="line">    front = (front + <span class="number">1</span>) % data.length;</span><br><span class="line">    size--;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == getCapacity() / <span class="number">4</span> &amp;&amp; getCapacity() / <span class="number">2</span> != <span class="number">0</span>) {</span><br><span class="line">        resize(getCapacity() / <span class="number">2</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>重写 <code>toString()</code> 方法，循环队列的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/queues" target="_blank" rel="noopener">LoopQueue.java</a></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(String.format(<span class="string">"Queue: size = %d , capacity = %d\n"</span>, size, getCapacity()));</span><br><span class="line">    res.append(<span class="string">"front ["</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = front ; i != tail ; i = (i + <span class="number">1</span>) % data.length) {</span><br><span class="line"></span><br><span class="line">        res.append(data[i]);</span><br><span class="line">        <span class="keyword">if</span> ((i + <span class="number">1</span>) % data.length != tail) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] tail"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-5-循环队列的时间复杂度"><a href="#3-5-循环队列的时间复杂度" class="headerlink" title="3.5 循环队列的时间复杂度"></a>3.5 循环队列的时间复杂度</h2><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void enqueue(E e)</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E dequeue()</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E getFront()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">int getSize()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">O(1)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
+<li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Song Ningning 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Song Ningning 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Song Ningning
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://sningning.gitee.io/posts/f9c8b94e/" title="数据结构02-栈和队列">https://sningning.gitee.io/posts/f9c8b94e/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/bb3e32af/" rel="prev" title="数据结构01-数组">
+      <i class="fa fa-chevron-left"></i> 数据结构01-数组
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-栈（Stack）"><span class="nav-text">1.栈（Stack）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-栈的接口中定义的几个操作"><span class="nav-text">1.1 栈的接口中定义的几个操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-基于-Array-类的栈实现"><span class="nav-text">1.2 基于 Array 类的栈实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-栈的复杂度分析"><span class="nav-text">1.3 栈的复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-队列（Queue）"><span class="nav-text">2. 队列（Queue）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-队列的接口中定义的几个操作"><span class="nav-text">2.1 队列的接口中定义的几个操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-基于-Array-类的队列实现"><span class="nav-text">2.2 基于 Array 类的队列实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-队列的复杂度分析"><span class="nav-text">2.3 队列的复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-循环队列"><span class="nav-text">3. 循环队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-循环队列介绍"><span class="nav-text">3.1 循环队列介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-循环队列中简单方法的实现"><span class="nav-text">3.2 循环队列中简单方法的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-底层数组容量调整"><span class="nav-text">3.3 底层数组容量调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-循环队列入队、出队的实现"><span class="nav-text">3.4 循环队列入队、出队的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-循环队列的时间复杂度"><span class="nav-text">3.5 循环队列的时间复杂度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Song Ningning"
+      src="/images/profile_pic.jpg">
+  <p class="site-author-name" itemprop="name">Song Ningning</p>
+  <div class="site-description" itemprop="description">己所不欲 勿施于人</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sningning" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Sningning" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qfsnn1117@126.com" title="E-Mail → qfsnn1117@126.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Ningning</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">16k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">15 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pBbqtWKVEqWEt7mPeHsCoC3Q-gzGzoHsz',
+      appKey     : 'Tb92Uo4lbYgTBTGR2aWri46v',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

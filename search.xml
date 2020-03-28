@@ -1,16 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数据结构02-栈和队列</title>
+    <url>/posts/f9c8b94e/</url>
+    <content><![CDATA[<p><strong>栈（Stack）</strong>是一种后入先出（Last In First Out, LIFO）的线性数据结构， 只能从一端添加或取出元素，进出元素的一端称为栈顶。<br><strong>队列（Queue）</strong>是一种先入先出（First In First Out, FIFO）的线性数据结构，只能从一端添加元素，从另一端取出元素，添加元素一端称为队尾，取出元素的一端称为队首。</p>
+<a id="more"></a>
+
+
+<h1 id="1-栈（Stack）"><a href="#1-栈（Stack）" class="headerlink" title="1.栈（Stack）"></a>1.栈（Stack）</h1><h2 id="1-1-栈的接口中定义的几个操作"><a href="#1-1-栈的接口中定义的几个操作" class="headerlink" title="1.1 栈的接口中定义的几个操作"></a>1.1 栈的接口中定义的几个操作</h2><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">获取栈中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">判断栈是否为空</td>
+</tr>
+<tr>
+<td align="center">void push(E e)</td>
+<td align="center">入栈，向栈中压入元素 e</td>
+</tr>
+<tr>
+<td align="center">E pop()</td>
+<td align="center">出栈，弹出栈顶元素</td>
+</tr>
+<tr>
+<td align="center">E peek()</td>
+<td align="center">查看栈顶元素</td>
+</tr>
+</tbody></table>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/stack.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取栈中元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断栈是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入栈，向栈中压入元素 e</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出栈，弹出栈顶元素</span></span><br><span class="line">    <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看栈顶元素</span></span><br><span class="line">    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="1-2-基于-Array-类的栈实现"><a href="#1-2-基于-Array-类的栈实现" class="headerlink" title="1.2 基于 Array 类的栈实现"></a>1.2 基于 Array 类的栈实现</h2><p>如果用之前实现的动态数组 Array 类来实现栈，很多方法可以直接复用。由于在数组的末尾添加元素和删除元素的复杂度为 O(1)，因此将数组的末尾作为栈顶。</p>
+<p>在实现栈中 <code>push(E e)</code> 和 <code>pop()</code> 方法时，根据后入先出的原则，分别复用 Array 中的 <code>addLast(E e)</code> 和 <code>removeLast()</code> 方法。<code>peek()</code> 操作只是查看栈顶元素，并非删除，因此复用 Array 类中的 <code>getLast()</code> 方法。</p>
+<p>另外再添加 <code>getCapacity()</code> 方法，返回当前栈的容量，具体实现是返回底层数组的容量。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayStack</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Array&lt;E&gt; array;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayStack</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;(capacity);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayStack</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> array.getCapacity();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getSize();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.isEmpty();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span> </span>{</span><br><span class="line">        array.addLast(e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">pop</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.removeLast();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">peek</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getLast();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>为了方便打印输出，重写一下 <code>toString()</code> 方法。数组栈的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/stacks" target="_blank" rel="noopener">ArrayStack.java</a></p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Stack: "</span>);</span><br><span class="line">    res.append(<span class="string">'['</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">            res.append(array.get(i));</span><br><span class="line">            <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>)</span><br><span class="line">                res.append(<span class="string">", "</span>);</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] top"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="1-3-栈的复杂度分析"><a href="#1-3-栈的复杂度分析" class="headerlink" title="1.3 栈的复杂度分析"></a>1.3 栈的复杂度分析</h2><p>由于 <code>push(E e)</code> 和 <code>pop()</code> 操作都是在数组尾操作，因此时间复杂度是 <code>O(1)</code>，如果触发 <code>resize()</code> 操作，按照均摊复杂度分析，整个过程也是 <code>O(1)</code>。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">void push(E e)</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E pop()</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E peek()</td>
+<td align="center">O(1)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="2-队列（Queue）"><a href="#2-队列（Queue）" class="headerlink" title="2. 队列（Queue）"></a>2. 队列（Queue）</h1><h2 id="2-1-队列的接口中定义的几个操作"><a href="#2-1-队列的接口中定义的几个操作" class="headerlink" title="2.1 队列的接口中定义的几个操作"></a>2.1 队列的接口中定义的几个操作</h2><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void enqueue(E e)</td>
+<td align="center">入队，向队列中添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">E dequeue()</td>
+<td align="center">出队，从队列中删除元素</td>
+</tr>
+<tr>
+<td align="center">E getFront()</td>
+<td align="center">查看队首元素</td>
+</tr>
+<tr>
+<td align="center">int getSize()</td>
+<td align="center">获取队列中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">判断队列是否为空</td>
+</tr>
+</tbody></table>
+<br>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队，向队列中添加新元素 e</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队，从队列中删除元素</span></span><br><span class="line">    <span class="function">E <span class="title">dequeue</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function">E <span class="title">getFront</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取队列中元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/queue.gif" width=""> </div>
+
+<h2 id="2-2-基于-Array-类的队列实现"><a href="#2-2-基于-Array-类的队列实现" class="headerlink" title="2.2 基于 Array 类的队列实现"></a>2.2 基于 Array 类的队列实现</h2><p>还是用之前实现的动态数组 Array 类来实现队列，很多方法可以直接复用。</p>
+<p>在实现队列中 <code>enqueue(E e)</code> 和 <code>dequeue()</code> 方法时，根据先入先出的原则，分别复用 Array 中的 <code>addLast(E e)</code> 和 <code>removeFirst()</code> 方法。<code>getFront()</code> 操作只是查看队首元素，并非删除，因此复用 Array 类中的 <code>getFirst()</code> 方法。</p>
+<p>另外再添加 <code>getCapacity()</code> 方法，返回当前栈的容量，具体实现是返回底层数组的容量。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Array&lt;E&gt; array;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;(capacity);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayQueue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Array&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> array.getCapacity();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line">        array.addLast(e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.removeFirst();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">getFront</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getFirst();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.getSize();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> array.isEmpty();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>为了方便打印输出，重写 <code>toString()</code> 方法。数组队列的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/queue" target="_blank" rel="noopener">ArrayQueue.java</a>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Queue: "</span>);</span><br><span class="line">    res.append(<span class="string">"front ["</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">        res.append(array.get(i));</span><br><span class="line">        <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] tail"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-3-队列的复杂度分析"><a href="#2-3-队列的复杂度分析" class="headerlink" title="2.3 队列的复杂度分析"></a>2.3 队列的复杂度分析</h2><p>由于 <code>enqueue(E e)</code> 操作是在数组尾操作，因此时间复杂度是 <code>O(1)</code>，如果触发 <code>resize()</code> 操作，按照均摊复杂度分析，入队过程也是 <code>O(1)</code>。</p>
+<p>但出队操作是在数组头部进行，底层复用动态数组类中 <code>removeFirst()</code> 方法，因此时间复杂度为 O(n)。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void enqueue(E e)</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E dequeue()</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">E getFront()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">int getSize()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">O(1)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="3-循环队列"><a href="#3-循环队列" class="headerlink" title="3. 循环队列"></a>3. 循环队列</h1><h2 id="3-1-循环队列介绍"><a href="#3-1-循环队列介绍" class="headerlink" title="3.1 循环队列介绍"></a>3.1 循环队列介绍</h2><p>之前用动态数组实现的队列，出队操作由于复用了动态数组中 <code>removeFirst()</code> 操作，删除第一个元素后，后面的元素需要向前依次移动，因此时间复杂度为 O(n)。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/dequeue1.gif" width=""> </div>
+
+<p>考虑出队后，其余元素不进行移动，这样就可以使出队的时间复杂度变为 <code>O(1)</code>。</p>
+<p>当删除数组第一个元素后，不进行后面元素的移动，而是用一个 <code>front</code> 变量记录下当前第一个元素的索引位置，即队首元素位置，同时用一个 <code>tail</code> 变量记录下最后一个元素的下一个索引位置，也是新元素入队时的索引位置。这样当删除数组第一个元素后，只需要维护 <code>front</code> 就可以。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/dequeue2.gif" width=""> </div>
+
+<p>循环队列的初始状态下，队列中没有元素，<code>front</code> 和 <code>tail</code> 均指向底层数组的第一个位置，因此当 <code>front == tail</code> 时，队列为空。</p>
+<p>进行入队操作时，只需维护 <code>tail</code>；如果进行出队操作，只需维护 <code>front</code>。</p>
+<p>当底层数组中最后一个位置存在元素，再进行入队操作时，<code>tail</code> 就无法进行简单的 <code>tail++</code> 操作，但是由于进行了出队操作，底层数组的前半部分是空闲的，如下图中所示，这时 <code>tail</code> 应该指向 <code>data[0]</code>，因此要实现这种循环的操作，<code>tail</code> 的维护应该变成 <code>tail = (tail + 1) % data.length</code>。</p>
+<p>当底层数组中 <code>tail + 1 == front</code>时，再添加元素，此时 <code>front == tail</code>，而前面定义这种情况是队列为空的判断条件，因此在这种情况下，选择不再添加元素，即判断队列为满的条件是  <code>tail + 1 == front</code>，但由于是循环队列，这个判断条件响应改为 <code>(tail + 1) % data.length == front</code>，如同钟表一样，11 点的下一个小时我们可以说是 12 点或者是 <code>0</code> 点，钟表中的 12 个刻度对应底层数组的长度 <code>data.length</code>。这时浪费了一个数组空间，因此当前队列所能存储最多的元素个数为 <code>data.length - 1</code>。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/LoopQueue.gif" width=""> </div>
+
+<h2 id="3-2-循环队列中简单方法的实现"><a href="#3-2-循环队列中简单方法的实现" class="headerlink" title="3.2 循环队列中简单方法的实现"></a>3.2 循环队列中简单方法的实现</h2><p>先进行 <code>LoopQueue</code> 类中简单操作的实现，由于实现方式不同，这里不再复用之前的 <code>Array</code> 动态数组类。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoopQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> E[] data;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> front, tail;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;   </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoopQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>{</span><br><span class="line">      </span><br><span class="line">        data = (E[])<span class="keyword">new</span> Object[capacity + <span class="number">1</span>];</span><br><span class="line">        front = <span class="number">0</span>;  <span class="comment">// 队列中第一个元素的索引</span></span><br><span class="line">        tail = <span class="number">0</span>;   <span class="comment">// 队列中最后一个元素的下一个索引</span></span><br><span class="line">        size = <span class="number">0</span>;   <span class="comment">// 队列中元素个数</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoopQueue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>(<span class="number">10</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> data.length - <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> front == tail;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后面实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后面实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后面实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">getFront</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-3-底层数组容量调整"><a href="#3-3-底层数组容量调整" class="headerlink" title="3.3 底层数组容量调整"></a>3.3 底层数组容量调整</h2><p>底层数组的容量调整和之前 <code>Array</code> 中 <code>resize(int newCapacity)</code> 方法类似。差别在于两个地方：遍历旧数组、维护 <code>front</code> 和 <code>tail</code>。</p>
+<p>为了保证元素的顺序，必须从 <code>front</code> 开始遍历旧的 <code>data</code> 数组时，但旧数组中 <code>front</code> 可能不为 <code>0</code>，即不能进行 <code>newData[i] = data[i]</code> 这种操作，这时 <code>data</code> 中元素相对于 <code>newData</code> 中元素的索引值存在 front 数量的偏移，同时由于是循环队列，有可能会产生越界，需要再对 <code>data.length</code> 进行取模。这里也有两种遍历方式。</p>
+<p>方式一：终止条件从 <code>size</code> 考虑。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">    newData[i] = data[(i + front) % data.length];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>方式二：终止条件从 <code>tail</code> 考虑。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = front ; i != tail ; i = (i + <span class="number">1</span>) % data.length) {</span><br><span class="line">    newData[(i - front) % data.length] = data[i];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>在容量调整后，<code>front</code> 重新指向了新数组索引为 <code>0</code> 的位置，<code>tail</code> 重新指向了新数组中索引为 <code>size</code> 的位置。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span> </span>{</span><br><span class="line"></span><br><span class="line">    E[] newData = (E[]) <span class="keyword">new</span> Object[newCapacity + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">        newData[i] = data[(i + front) % data.length];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    data = newData;</span><br><span class="line">    front = <span class="number">0</span>;</span><br><span class="line">    tail = size;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="3-4-循环队列入队、出队的实现"><a href="#3-4-循环队列入队、出队的实现" class="headerlink" title="3.4 循环队列入队、出队的实现"></a>3.4 循环队列入队、出队的实现</h2><p>循环队列底层数组的添加、删除和容量调整的方式和 <code>Array</code> 中的方法基本是相同的，差别主要在于维护 <code>front</code> 和 <code>tail</code> 变量时并不是简单加一，而是需要加一并取模数组长度。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (tail + <span class="number">1</span>) % data.length == front ) {</span><br><span class="line">        resize( getCapacity() * <span class="number">2</span> );</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    data[tail] = e;</span><br><span class="line">    tail = (tail + <span class="number">1</span>) % data.length;</span><br><span class="line">    size++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (isEmpty()) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"出队失败，队列为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E ret = data[front];</span><br><span class="line">    data[front] = <span class="keyword">null</span>;</span><br><span class="line">    front = (front + <span class="number">1</span>) % data.length;</span><br><span class="line">    size--;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == getCapacity() / <span class="number">4</span> &amp;&amp; getCapacity() / <span class="number">2</span> != <span class="number">0</span>) {</span><br><span class="line">        resize(getCapacity() / <span class="number">2</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>重写 <code>toString()</code> 方法，循环队列的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/queues" target="_blank" rel="noopener">LoopQueue.java</a></p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(String.format(<span class="string">"Queue: size = %d , capacity = %d\n"</span>, size, getCapacity()));</span><br><span class="line">    res.append(<span class="string">"front ["</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = front ; i != tail ; i = (i + <span class="number">1</span>) % data.length) {</span><br><span class="line"></span><br><span class="line">        res.append(data[i]);</span><br><span class="line">        <span class="keyword">if</span> ((i + <span class="number">1</span>) % data.length != tail) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] tail"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-5-循环队列的时间复杂度"><a href="#3-5-循环队列的时间复杂度" class="headerlink" title="3.5 循环队列的时间复杂度"></a>3.5 循环队列的时间复杂度</h2><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void enqueue(E e)</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E dequeue()</td>
+<td align="center">O(1) 均摊</td>
+</tr>
+<tr>
+<td align="center">E getFront()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">int getSize()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">O(1)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
+<li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构01-数组</title>
     <url>/posts/bb3e32af/</url>
-    <content><![CDATA[<h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h1><blockquote>
+    <content><![CDATA[<blockquote>
 <p>数组（Array），是由相同类型的元素（element）的集合所组成的数据结构，分配一块<strong>连续</strong>的内存来存储。利用元素的索引（index）可以计算出该元素对应的存储地址。——维基百科</p>
 </blockquote>
 <p>数组最大的优点就是<strong>快速查询</strong>。</p>
 <a id="more"></a>
 
-<p>实现的数组类中包含的方法：</p>
-<table>
+<h1 id="1-数组类中包含的方法"><a href="#1-数组类中包含的方法" class="headerlink" title="1. 数组类中包含的方法"></a>1. 数组类中包含的方法</h1><table>
 <thead>
 <tr>
 <th align="center">方法</th>
@@ -130,7 +378,7 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="center">void add( int index, E e )</td>
+<td align="center">void add(int index, E e)</td>
 <td align="center">在第 index 个位置插入一个新元素 e</td>
 </tr>
 <tr>
@@ -162,7 +410,7 @@
 
 <p> 由于数组中存放元素必须是连续存储，因此在某个索引位置添加元素时，索引位置处的元素以及其后所有的元素需要依次向后移动一个位置，之后，再将元素插入指定索引位置，在后移元素时，必须是最后一个元素先进行移动。</p>
 <p> 在添加之前，还需注意两个情况：数组是否已经存满元素；传入的索引是否是合法的。对这两个情况检查完毕没有问题后，就可以将元素添加到指定索引位置，元素添加完毕后，还需要将数组元素个数加 1，即维护 <code>size</code>。</p>
-<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/1-Array/add.gif" width=""> </div>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/add.gif" width=""> </div>
 
 <figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在 index 索引位置插入新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == data.length) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，数组已满。"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt; size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 后移元素</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt;= index ; i--) {</span><br><span class="line">        data[i + <span class="number">1</span>] = data[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 插入元素</span></span><br><span class="line">    data[index] = e;</span><br><span class="line">    <span class="comment">// 维护 size</span></span><br><span class="line">    size ++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
@@ -262,10 +510,11 @@
 
 <h2 id="5-2-删除元素"><a href="#5-2-删除元素" class="headerlink" title="5.2 删除元素"></a>5.2 删除元素</h2><p>数组中的元素都是连续存储，因此删除操作实际上也是元素移动的过程，具体执行删除操作时，直接将待删除索引位置后面的元素依次向前移动覆盖，前移过程必须是待删除索引位置后第一个位置元素先进行移动。</p>
 <p>当最后的元素 56 向前移动后，维护了 <code>size</code>，此时 <code>size</code> 指向了索引为 5 位置的 56，该元素用户是访问不到的。但是由于使用了泛型，所以实际上 <code>size</code> 还是指向了一个对象的引用，Java 的垃圾回收机制无法对其进行回收， 应该手动进行释放。</p>
-<blockquote>
-<p>Java 的垃圾收集策略是回收所有无法被访问的对象的内存。在我们对 pop() 的实现中，被弹出的元素的引用仍然存在于数组中。这个元素实际上已经是一个孤儿了——它永远不会再被访问，但 Java 的垃圾收集器无法知道这一点，除非该引用被覆盖。即使用例不再需要这个元素了，数组中的引用仍然可以让它继续存在。这种情况（保存一个不需要的对象的引用）成为<strong>游离(loitering)</strong>。在这里，避免对象游离很容易，只需将被弹出的数组元素的值设为 null 即可。这将覆盖无用的引用并使系统可以在用例使用完被弹出的元素后回收它的内存。——《算法(第4版)》 P85</p>
-</blockquote>
-<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/1-Array/delete.gif" width=""> </div>
+<div class="note primary">
+            <p>Java 的垃圾收集策略是回收所有无法被访问的对象的内存。在我们对 pop() 的实现中，被弹出的元素的引用仍然存在于数组中。这个元素实际上已经是一个孤儿了——它永远不会再被访问，但 Java 的垃圾收集器无法知道这一点，除非该引用被覆盖。即使用例不再需要这个元素了，数组中的引用仍然可以让它继续存在。这种情况（保存一个不需要的对象的引用）成为<strong>游离(loitering)</strong>。在这里，避免对象游离很容易，只需将被弹出的数组元素的值设为 null 即可。这将覆盖无用的引用并使系统可以在用例使用完被弹出的元素后回收它的内存。——《算法(第4版)》 P85</p>
+          </div>
+
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/delete.gif" width=""> </div>
 
 <figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从数组中删除 index 位置的元素, 返回被删除的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"删除失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E ret = data[index];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = index + <span class="number">1</span> ; i &lt; size ; i ++) {</span><br><span class="line">            data[i - <span class="number">1</span>] = data[i];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    size--;</span><br><span class="line">    data[size] = <span class="keyword">null</span>;  <span class="comment">// 避免对象游离</span></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <br>
@@ -281,18 +530,18 @@
 <hr>
 <h1 id="6-动态调整容量"><a href="#6-动态调整容量" class="headerlink" title="6. 动态调整容量"></a>6. 动态调整容量</h1><p>前面所有操作的实现，底层都是基于 <code>data</code> 数组，当实例化 <code>Array</code> 类后，底层 <code>data</code> 数组的容量就已经固定了。如果不断向数组中添加元素，势必会导致数组被填满，因此可以考虑，在添加完元素后，当满足一定条件时，进行底层 <code>data</code> 数组的扩容；另一方面，当删除完元素后，可以考虑当满足一定条件时，对底层 <code>data</code> 数组进行缩容。</p>
 <p>数组大小的动态调整（缩容或扩容），实质上是将原来数组的元素，逐个复制到新的数组中，然后将之前的数组引用 <code>data</code> 指向新的数组，Java 的垃圾回收机制会将之前的数组进行回收。这里实现一个私有的方法 <code>resize(int newCapacity)</code> 来调整数组容量，设置成私有方法是因为，对于使用 <code>Array</code> 类的用户来说，容量调整这个过程是对其屏蔽的。</p>
-<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/1-Array/resize1.gif"></div>
+<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/resize1.gif"></div>
 <br>
-<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/1-Array/resize2.gif"></div>
+<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/resize2.gif"></div>
 
 
 <figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 数组容量调整</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span> </span>{</span><br><span class="line"></span><br><span class="line">    E[] newData = (E[]) <span class="keyword">new</span> Object[newCapacity];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">        newData[i] = data[i];</span><br><span class="line">    }</span><br><span class="line">    data = newData;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <br>
 
 <h2 id="6-1-扩容"><a href="#6-1-扩容" class="headerlink" title="6.1 扩容"></a>6.1 扩容</h2><p>扩容，是在添加元素时进行的，前面实现的 <code>add(int index, int e)</code> 方法中，对于数组已满的情况是抛出了异常，现在可以将底层 <code>data</code> 数组进行扩容，扩容的大小设置为当前容量的 <code>2</code> 倍，即 <code>2 * data.length</code>，这里设置的新数组的容量是与现有元素个数相关联的，保证新数组容量和之前数组中元素的个数是一个数量级。 </p>
-<blockquote>
-<p>在 <code>Java</code> 中，<code>ArrayList</code> 扩容是变为原来的 <strong><code>1.5</code></strong> 倍。在 <code>ArrayList</code> 类的 <code>grow(int minCapacity)</code> 私有方法中， <strong><code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code></strong> 进行了新容量的设定。</p>
-</blockquote>
+<div class="note primary">
+            <p>在 <code>Java</code> 中，<code>ArrayList</code> 扩容是变为原来的 <strong><code>1.5</code></strong> 倍。在 <code>ArrayList</code> 类的 <code>grow(int minCapacity)</code> 私有方法中， <strong><code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code></strong> 进行了新容量的设定。</p>
+          </div>
 <br>
 
 <figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在第 index 个位置插入一个新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">( <span class="keyword">int</span> index, E e )</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( index &lt; <span class="number">0</span> || index &gt; size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 扩容</span></span><br><span class="line">    <span class="keyword">if</span> ( size == data.length ) {</span><br><span class="line">        resize(<span class="number">2</span> * data.length);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt;= index; i--)</span><br><span class="line">        data[i + <span class="number">1</span>] = data[i];</span><br><span class="line"></span><br><span class="line">    data[index] = e;</span><br><span class="line">    size++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
@@ -372,19 +621,19 @@
 <p>更普遍的，假设 <code>capacity = n</code>，<code>n + 1</code> 次 <code>addLast()</code> ，触发 <code>resize</code> 操作，总共进行了 <code>n + n + 1 = 2n + 1</code> 次基本操作。平均来看，每次 <code>addLast()</code> 操作会进行 <code>2</code> 次基本操作。这里 <code>1</code> 次 <code>resize</code> 的时间<strong>平摊</strong>给了 <code>n + 1</code> 次 <code>addLast()</code> 操作，这样均摊来看，<code>addLast()</code> 的时间复杂度为 <code>O(1)</code>，因此在这里 <code>addLast()</code> 的<strong>均摊复杂度(Amortized Time Complexity)</strong> 为 <code>O(1)</code>。</p>
 <p>同理，从均摊复杂度分析，<code>removeLast()</code> 的摊复杂度也是 O(1)。</p>
 <p>但是，当 <code>size == data.length</code>，也就是 <code>size == capacity</code> 时，依次进行 <code>addLast()</code> 和 <code>removeLast()</code> 操作，根据之前 <code>add</code> 和 <code>remove</code> 中扩容缩容的条件，会出现<strong>复杂度振荡</strong>的情况。</p>
-<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/1-Array/complexity.gif"></div>
+<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/complexity.gif"></div>
 <br> 
 
 <p>出现复杂度振荡的原因，是在进行 <code>removeLast()</code> 操作时 <code>resize</code> 过于<strong>着急(eager)</strong> ，当元素个数等于数组容量的一半时马上进行缩容，缩容完整个 <code>data</code> 数组是满的，再添加元素肯定需要再进行扩容。解决的方法就是采用 <strong>懒惰 (lazy)</strong> 的方案，当 <code>size == data.length / 4</code> 时，再进行容量减半，此时缩容完，<code>data</code> 数组还有一半的空余容量。</p>
 <p>注意，因为是要缩容，<code>data.length</code> 要减小，有可能 <code>data.length == 1</code>，此时 <code>data.length / 2 == 0</code>，因此缩容前应该进行判断。</p>
 <figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从数组中删除 index 位置的元素，返回被删除的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"删除失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E ret = data[index];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = index + <span class="number">1</span>; i &lt; size; i++) {</span><br><span class="line">        data[i - <span class="number">1</span>] = (data[i]);</span><br><span class="line">    }</span><br><span class="line">    size--;</span><br><span class="line">    data[size] = <span class="keyword">null</span>; <span class="comment">// 避免对象游离</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 缩容</span></span><br><span class="line">    <span class="keyword">if</span> (size == data.length / <span class="number">4</span> &amp;&amp; data.length / <span class="number">2</span> != <span class="number">0</span>) {</span><br><span class="line">        resize(data.length / <span class="number">2</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/1-Array/LazyResize.gif"></div>
+<div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/LazyResize.gif"></div>
 
 <hr>
-<h1 id="9-数组类的整体实现"><a href="#9-数组类的整体实现" class="headerlink" title="9. 数组类的整体实现"></a>9. 数组类的整体实现</h1><p>为了方便打印输出，覆盖了 <code>toString()</code> 方法。整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/01-Arrays" target="_blank" rel="noopener">Array.java</a></p>
+<h1 id="9-数组类的整体实现"><a href="#9-数组类的整体实现" class="headerlink" title="9. 数组类的整体实现"></a>9. 数组类的整体实现</h1><p>为了方便打印输出，重写了 <code>toString()</code> 方法。整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/01-Arrays" target="_blank" rel="noopener">Array.java</a></p>
 <figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(String.format(<span class="string">"Array: size = %d, capacity = %d\n"</span>, size, data.length));</span><br><span class="line">    res.append(<span class="string">"["</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">        res.append(data[i]);</span><br><span class="line">        <span class="keyword">if</span>(i != size - <span class="number">1</span>) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"]"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <hr>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
 <li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
 <li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
