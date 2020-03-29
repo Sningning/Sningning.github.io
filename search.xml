@@ -244,6 +244,9 @@
             document.body.appendChild(img);
           });
       </script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
       <tags>
         <tag>数据结构</tag>
         <tag>Java</tag>
@@ -658,7 +661,7 @@
           });
       </script>]]></content>
       <categories>
-        <category>数据结构</category>
+        <category>数据结构与算法</category>
       </categories>
       <tags>
         <tag>数据结构</tag>
