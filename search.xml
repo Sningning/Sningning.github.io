@@ -1,6 +1,390 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数据结构03-链表</title>
+    <url>/posts/ee7bd491/</url>
+    <content><![CDATA[<p><strong>链表（Linked list）</strong> 是一种 <strong>动态</strong> 的线性数据结构，但并不是按线性的顺序存储数据。链表通常由一连串结点（Node）组成，每个节点包含任意的实例数据（data fields）和一或两个用来指向上一个/或下一个节点的位置的引用（prev或next）。<br>链表的优点是不需要处理固定容量的问题，但是链表失去了数组随机读取的优点。</p>
+<a id="more"></a>
+
+<h1 id="1-链表"><a href="#1-链表" class="headerlink" title="1. 链表"></a>1. 链表</h1><p>链表是一种天然带有递归性质的线性结构，在链表中数据存储在<strong>结点</strong>中，结点中同时存储了指向下一个结点的引用（这里只介绍单向链表）。</p>
+<p>链表类中的操作：</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">获取链表中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">返回链表是否为空</td>
+</tr>
+<tr>
+<td align="center">void add(int index, E e)</td>
+<td align="center">在链表的 index 位置添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">void addFirst(E e)</td>
+<td align="center">在链表头部添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">addLast(E e)</td>
+<td align="center">在链表末尾添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">E get(int index)</td>
+<td align="center">获得链表的第 index 个位置的元素</td>
+</tr>
+<tr>
+<td align="center">E getFirst()</td>
+<td align="center">获得链表的第一个元素</td>
+</tr>
+<tr>
+<td align="center">E getLast()</td>
+<td align="center">获得链表的最后一个元素</td>
+</tr>
+<tr>
+<td align="center">E set(int index, E e)</td>
+<td align="center">修改链表的第 index 个位置的元素为 e，返回该位置之前的元素</td>
+</tr>
+<tr>
+<td align="center">boolean contains(E e)</td>
+<td align="center">查找链表中是否存在元素 e</td>
+</tr>
+<tr>
+<td align="center">E remove(int index)</td>
+<td align="center">从链表中删除第 index 个位置的元素，返回被删除的元素</td>
+</tr>
+<tr>
+<td align="center">E removeFirst()</td>
+<td align="center">从链表中删除第一个元素，返回被删除的元素</td>
+</tr>
+<tr>
+<td align="center">E removeLast()</td>
+<td align="center">从链表中删除最后一个元素，返回被删除的元素</td>
+</tr>
+<tr>
+<td align="center">void removeElement(E e)</td>
+<td align="center">从链表中删除元素e</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 结点类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line">  E e;</span><br><span class="line">  Node next;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-LinkedList/LinkedList.png" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 结点内部类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line">        <span class="keyword">public</span> E e;</span><br><span class="line">        <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e, Node next)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>(e, <span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> e.toString();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="2-向链表中添加元素"><a href="#2-向链表中添加元素" class="headerlink" title="2. 向链表中添加元素"></a>2. 向链表中添加元素</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">获取链表中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">返回链表是否为空</td>
+</tr>
+<tr>
+<td align="center">void add(int index, E e)</td>
+<td align="center">在链表的 index 位置添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">void addFirst(E e)</td>
+<td align="center">在链表头部添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">addLast(E e)</td>
+<td align="center">在链表末尾添加新元素 e</td>
+</tr>
+</tbody></table>
+<p>先将链表类的几个基本属性和方法声明出来。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 结点内部类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>{</span><br><span class="line">        <span class="keyword">public</span> E e;</span><br><span class="line">        <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e, Node next)</span></span>{</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span></span>{</span><br><span class="line">            <span class="keyword">this</span>(e, <span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span></span>{</span><br><span class="line">            <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{</span><br><span class="line">            <span class="keyword">return</span> e.toString();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node head;  <span class="comment">// 头结点</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;   <span class="comment">// 链表中元素个数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span></span>{</span><br><span class="line">        head = <span class="keyword">null</span>;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取链表中的元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回链表是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/03-LinkedList/addFirst.gif" width=""> </div>
+
+<p>在链表头部添加元素，只需将之前整个链表的 <code>head</code> 赋给新插入结点的 <code>next</code> ，同时维护 <code>head</code> 和 <code>size</code>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在链表头添加新的元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    head = <span class="keyword">new</span> Node(e, head);</span><br><span class="line">    size ++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/03-LinkedList/add.gif" width=""> </div>
+
+
+<p>根据图示可以看出，在某个位置添加元素最重要的是要找到前一个结点，设置一个结点引用 <code>prev</code>，通过移动 <code>prev</code> 找到待插入的位置的前一个位置，之后进行 <code>node.next = prev.next</code> 和 <code>prev.next = node</code> 两步操作就可以完成在某个位置添加元素的操作，最后维护 <code>size</code>。注意此时 <code>prev</code> 移动的次数，如果放在 3 这个位置，那么 <code>prev</code> 移动 2 次，即当 <code>prev == 2</code> 时就停止，所以循环条件是 <code>i &lt; index - 1</code>。</p>
+<p>但是，如果 <code>index == 0</code>，即在链表头添加元素，由于 <code>head</code> 没有前一个结点，所以这种情况下需要单独处理。</p>
+<p>切记两个操作不开颠倒顺序，否则，当执行完 <code>prev.next = node</code> 时，<code>prev.next</code> 已经指向了 <code>node</code>，再执行 <code>node.next = prev.next</code> 就出现了逻辑上的错误。</p>
+<p>需要说明的是，在链表中一个位置添加元素是不常用的操作，其实在链表中没有索引这个概念，这里只是借助这个概念。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在链表的 index 位置添加新元素 e</span></span><br><span class="line"><span class="comment">// 在链表中不是一个常用的操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt; size) {</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 在链表头添加，需要调用 addFirst 方法</span></span><br><span class="line">    <span class="keyword">if</span> (index == <span class="number">0</span>) {</span><br><span class="line">        addFirst(e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line"></span><br><span class="line">        Node prev = head;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index - <span class="number">1</span>, i++) {</span><br><span class="line">            prev = prev.next;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Node node = new Node(e);</span></span><br><span class="line">        <span class="comment">// node.next = prev.next;</span></span><br><span class="line">        <span class="comment">// prev.next = node;</span></span><br><span class="line">        prev.next = node(e, prev.next);</span><br><span class="line">        size++;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>在链表末尾添加元素就可以直接复用 <code>add(int index, E e)</code> 方法，将 <code>index</code> 设置为 <code>size</code> 即可。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在链表末尾添加新的元素e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span></span>{</span><br><span class="line">    add(size, e);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="3-虚拟头结点"><a href="#3-虚拟头结点" class="headerlink" title="3. 虚拟头结点"></a>3. 虚拟头结点</h1><p>之前在向链表中添加元素时，如果是在头部添加元素，由于头结点没有前结点，因此需要单独考虑。为了将对链表头的操作与其他操作统一起来，设立一个<strong>虚拟头结点(dummyHead)</strong>，虚拟头结点不存储元素，只有一个指向 <code>head</code> 的引用。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/03-LinkedList/dummyHead.png" width=""> </div>
+
+<p>有了虚拟头结点，便可以将添加操作统一起来。新增 <code>dummyHead</code> 属性，初始化时将其建立起来，但元素值和 next 引用均为空。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 内部类：Node</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>{</span><br><span class="line">        <span class="keyword">public</span> E e;</span><br><span class="line">        <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e, Node next)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>(e,<span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> e.toString();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node dummyHead;  <span class="comment">// 虚拟头结点</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span></span>{</span><br><span class="line">        dummyHead = <span class="keyword">new</span> Node(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取链表中元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回链表是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>有了虚拟头结点后，从链表头部添加元素就不需要再单独考虑，因为 <code>dummyHead</code> 中 <code>next</code> 就指向链表第一个元素。注意，增加了虚拟头结点后，只需遍历 index 次，所以循环继续进行的条件是 <code>i &lt; index</code>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在链表的 index 位置添加新元素 e</span></span><br><span class="line"><span class="comment">// 在链表中不是一个常用的操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt; size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="comment">// 有虚拟头结点，从头部插入依然是安全的</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++) {</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    prev.next = <span class="keyword">new</span> Node(e, prev.next);</span><br><span class="line">    size ++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>此时向链表头部添加元素就可以复用 <code>add</code> 方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在链表头部添加新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span> </span>{</span><br><span class="line">  add(<span class="number">0</span>, e);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="4-链表的遍历、查询和修改"><a href="#4-链表的遍历、查询和修改" class="headerlink" title="4. 链表的遍历、查询和修改"></a>4. 链表的遍历、查询和修改</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">E get(int index)</td>
+<td align="center">获得链表的第 index 个位置的元素</td>
+</tr>
+<tr>
+<td align="center">E getFirst()</td>
+<td align="center">获得链表的第一个元素</td>
+</tr>
+<tr>
+<td align="center">E getLast()</td>
+<td align="center">获得链表的最后一个元素</td>
+</tr>
+<tr>
+<td align="center">E set(int index, E e)</td>
+<td align="center">修改链表的第 index 个位置的元素为 e，返回该位置之前的元素</td>
+</tr>
+<tr>
+<td align="center">boolean contains(E e)</td>
+<td align="center">查找链表中是否存在元素 e</td>
+</tr>
+</tbody></table>
+<p>在链表中是不常使用索引的，因此 <code>get</code> 方法也不经常使用，更多是用来熟悉链表的遍历操作。</p>
+<p>查询操作是需要找到 index 位置的结点，而添加操作是要找到 index 的前一个结点，因此对于查询操作，从链表真正的第一个结点开始遍历，由于设置了虚拟头结点，因此，遍历操作是从 <code>dummyHead.next</code> 进行的。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 获得链表的第 index 个位置的元素</span></span><br><span class="line"><span class="comment">// 在链表中不是一个常用的操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"获取失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node cur = dummyHead.next;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++) {</span><br><span class="line">        cur= cur.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> cur.e;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>获取链表中第一个元素和最后一个元素就可以直接复用 <code>get</code> 方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 获得链表的第一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">getFirst</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> get(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 获得链表的最后一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">getLast</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> get(size - <span class="number">1</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>同样，修改元素也和查询元素一样需要遍历，只不过是把 index 位置的结点中数据域进行修改，最后维护 <code>size</code>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 修改链表的第 index 个位置的元素为 e，返回该位置之前的元素</span></span><br><span class="line"><span class="comment">// 在链表中不是一个常用的操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"获取失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node cur = dummyHead.next;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++&gt;) {</span><br><span class="line">        cur = cur.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E t = cur.e;</span><br><span class="line">    cur.e = e;</span><br><span class="line">    size--;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>设置一个查找的方法 <code>contains(E e)</code>，查询链表中是否包含元素 e。由于此时不知道具体索引位置，因此需要遍历整个链表，需要不断进行，直到到达链表的最后。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    Node cur = dummyHead.next;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) {</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (cur.e.equals(e)) {</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      }</span><br><span class="line"></span><br><span class="line">      cur = cur.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>为了方便输出，重写 <code>toString()</code> 方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Node cur = dummyHead.next; cur != <span class="keyword">null</span>; cur = cur.next) {</span><br><span class="line">        res.append(cur + <span class="string">"-&gt;"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    res.append(<span class="string">"NULL"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="5-从链表中删除元素"><a href="#5-从链表中删除元素" class="headerlink" title="5. 从链表中删除元素"></a>5. 从链表中删除元素</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">E remove(int index)</td>
+<td align="center">从链表中删除第 index 个位置的元素，返回被删除的元素</td>
+</tr>
+<tr>
+<td align="center">E removeFirst()</td>
+<td align="center">从链表中删除第一个元素，返回被删除的元素</td>
+</tr>
+<tr>
+<td align="center">E removeLast()</td>
+<td align="center">从链表中删除最后一个元素，返回被删除的元素</td>
+</tr>
+<tr>
+<td align="center">void removeElement(E e)</td>
+<td align="center">从链表中删除元素e</td>
+</tr>
+</tbody></table>
+<p>想要实现在链表 index 位置删除元素，和添加元素一样，先找到待删除元素的前一个结点 <code>prev</code>，然后将待删除结点用临时结点 <code>retNode</code> 暂存起来，然后跳过待删除结点，直接将待删除结点的下一个结点赋给 <code>prev</code> 的 <code>next</code> 引用。为了避免对象游离，将待删除结点 <code>retNode</code> 的 <code>next</code> 引用设置为空。最后将 <code>retNode</code> 结点的数据返回并维护 <code>size</code>。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/03-LinkedList/remove.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从链表中删除第 index 个位置的元素，返回被删除的元素</span></span><br><span class="line"><span class="comment">// 在链表中不是一个常用的操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"删除失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++) {</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node retNode = prev.next;</span><br><span class="line">    prev.next = retNode.next;</span><br><span class="line">    retNode.next = <span class="keyword">null</span>;</span><br><span class="line">    size--;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retNode.e;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>有了 <code>remove</code> 方法，从链表中删除第一个元素和最后一个元素就可以直接复用 <code>remove</code> 方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从链表中删除第一个元素，返回被删除的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">removeFirst</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> remove(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从链表中删除最后一个元素，返回被删除的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">removeLast</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> remove(size - <span class="number">1</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>要想从链表中删除元素，最重要的是要先找到它，找到之后，就和删除某个位置的元素一样操作就可以了。寻找的过程还是链表遍历的过程，删除元素是要找到待删除元素之前的结点 <code>prev</code>，因此遍历链表时从 <code>dummyHead</code> 开始，同时，遍历结束的条件是 <code>prev.next == null</code>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从链表中删除元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeElemet</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="keyword">while</span> (prev.next != <span class="keyword">null</span>) {</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (prev.next.e.equals(e)) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理待删除的结点</span></span><br><span class="line">    <span class="keyword">if</span> (prev.next != <span class="keyword">null</span>) {</span><br><span class="line"></span><br><span class="line">        Node retNode = prev.next;</span><br><span class="line">        prev.next = retNode.next;</span><br><span class="line">        retNode.next = <span class="keyword">null</span>;</span><br><span class="line">        size--;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="6-链表操作的时间复杂度"><a href="#6-链表操作的时间复杂度" class="headerlink" title="6. 链表操作的时间复杂度"></a>6. 链表操作的时间复杂度</h1><p><strong>添加操作</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">add(int index, E e)</td>
+<td align="center">O(n/2) = O(n)</td>
+</tr>
+<tr>
+<td align="center">addFirst(E e)</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">addLast(E e)</td>
+<td align="center">O(n)</td>
+</tr>
+</tbody></table>
+<p>由于在末尾添加元素需要遍历整个链表，所以时间复杂度为 <code>O(n)</code>；而在链表头部添加元素，是 <code>O(1)</code> 的时间复杂度；以上两个操作的时间复杂度是和数组相反的。当在链表任一位置插入元素是，平均来看，是往链表的中间添加元素，时间复杂度为 <code>O(n/2)</code>，总体也是 <code>O(n)</code> 级别。</p>
+<br>
+
+<p><strong>删除操作</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">remove(int index)</td>
+<td align="center">O(n/2) = O(n)</td>
+</tr>
+<tr>
+<td align="center">removeFirst()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">removeLast()</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">removeElement(E e)</td>
+<td align="center">O(n/2) = O(n)</td>
+</tr>
+</tbody></table>
+<p>如果删除最后一个元素，需要从头遍历整个链表，时间复杂度为 <code>O(n)</code>；删除第一个元素，只需 <code>O(1)</code> 的时间复杂度；这两个操作的时间复杂度和数组也是相反的。平均来看，<code>remove(int index)</code> 和 <code>removeElement(E e)</code> 的时间复杂度为 <code>O(n)</code>。</p>
+<br>
+
+<p><strong>修改、查找操作</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">set(int index, E e)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">get(int index)</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">getFirst()</td>
+<td align="center">O(1)</td>
+</tr>
+<tr>
+<td align="center">getLast()</td>
+<td align="center">O(n)</td>
+</tr>
+<tr>
+<td align="center">contains(E e)</td>
+<td align="center">O(n)</td>
+</tr>
+</tbody></table>
+<p>链表的修改和查找操作时间复杂度也是 <code>O(n)</code>。</p>
+<br>
+
+<p>总的来说，如果只对链表的头部进行操作，或者只对链表头部进行查找，时间复杂度是 <code>O(1)</code>，</p>
+<p><strong>链表整体实现：</strong> <a href="https://github.com/Sningning/DataStructures/tree/master/03-Linked-List" target="_blank" rel="noopener">LikedList.java</a></p>
+<hr>
+<h1 id="7-使用链表实现栈"><a href="#7-使用链表实现栈" class="headerlink" title="7. 使用链表实现栈"></a>7. 使用链表实现栈</h1><p>栈的接口：</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取栈中元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断栈是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入栈，向栈中压入元素 e</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出栈，弹出栈顶元素</span></span><br><span class="line">    <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看栈顶元素</span></span><br><span class="line">    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>由于在链表头操作的时间复杂度为 <code>O(1)</code>，因此栈的 <code>pop</code> 和 <code>push</code> 都应在链表头进行，也就是说，链表的头部是栈顶，尾部是栈底。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 用链表实现栈</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedListStack</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> LinkedList&lt;E&gt; linkedList;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedListStack</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.linkedList = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> linkedList.getSize();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> linkedList.isEmpty();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span> </span>{</span><br><span class="line">        linkedList.addFirst(e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">pop</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> linkedList.removeFirst();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">peek</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> linkedList.getFirst();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">        StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        res.append(<span class="string">"Stack: "</span>);</span><br><span class="line">        res.append(<span class="string">"top ["</span>);</span><br><span class="line">        res.append(linkedList);</span><br><span class="line">        res.append(<span class="string">"]"</span>);</span><br><span class="line">        <span class="keyword">return</span> res.toString();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="8-使用链表实现队列"><a href="#8-使用链表实现队列" class="headerlink" title="8. 使用链表实现队列"></a>8. 使用链表实现队列</h1><p>对于队列，要在一端添加元素，另一端删除元素，但是对于链表来说势必会有一个 <code>O(n)</code> 的操作，其实之前用数组实现队列的时候也有同样的问题，不过用循环队列改进后，性能就提升了。因此用链表实现队列，也进行改进。</p>
+<p>由于有 <code>head</code> 变量，所以之前对于链表头部的操作都是简单的，因此，可以考虑同时在链表尾部设置 <code>tail</code> 变量，指向最后一个结点，在对链表操作的时候，同时维护 <code>tail</code>。</p>
+<p>添加了 <code>tail</code> 之后，想要在尾部添加元素就变得很方便，相当于在 <code>tail</code> 后面添加一个结点，这是，从链表的头部和尾部添加元素都是容易的</p>
+<p>添加了 <code>tail</code> 之后，要想在尾部删除元素，就是说要找到 <code>tail</code> 前一个结点，但找到前一个结点又要进行遍历，所以从尾部删除元素是不容易的。</p>
+<p>总的来说，添加 <code>tail</code> 变量之后，在链表尾部添加元素变得方便，而在头部添加或删除都是方便的，因此，选择在链表头部删除元素，在链表尾部添加元素，即：<strong>将链表头作为队首，链表尾部作为队尾</strong>。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/03-LinkedList/tail.gif" width=""> </div>
+
+<p>先将简单的操作进行实现。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedListQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 内部类：Node</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line">        <span class="keyword">public</span> E e;</span><br><span class="line">        <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e, Node next)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>(e,<span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> e.toString();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node head, tail;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedListQueue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.head = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.tail = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>进行入队操作，如果队列不为空，则直接将元素添加到最后即可，同时维护 <code>tail</code> 和 <code>size</code>。当队列为空时，<code>head</code> 和 <code>tail</code> 均指向 <code>null</code>，此时向空队中添加一个元素时，直接将 <code>tail</code> 指向入队的那个结点，同时维护 <code>head</code> 和 <code>size</code>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (tail == <span class="keyword">null</span>) {  </span><br><span class="line">        tail = <span class="keyword">new</span> Node(e);</span><br><span class="line">        head = tail;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        tail.next = <span class="keyword">new</span> Node(e);</span><br><span class="line">        tail = tail.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    size ++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>正常出队的时候，只需按照链表中删除第一个元素，维护 <code>size</code> 即可。但是要注意，当队列中只有一个元素，<code>head.next</code> 为空，经过 <code>head = head.next</code> 操作后，队列已经为空，此时 <code>head == null</code>，因此还需要额外维护下 <code>tail</code>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (isEmpty()) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"队列为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node retNode = head;</span><br><span class="line">    head = head.next;</span><br><span class="line">    retNode.next = <span class="keyword">null</span>;  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) { </span><br><span class="line">        tail = <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line">    size --;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retNode.e;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>查看队首元素只需将 <code>head</code> 数据域中的元素返回即可。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">getFront</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (isEmpty()) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"队列为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> head.e;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>最后重写 <code>toString()</code> 方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Queue: front "</span>);</span><br><span class="line"></span><br><span class="line">    Node cur = head;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) {</span><br><span class="line">        res.append(cur + <span class="string">"-&gt;"</span>);</span><br><span class="line">        cur = cur.next;</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"NULL tail"</span>);</span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>用链表实现栈整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/queues" target="_blank" rel="noopener">LinkedListQueue.java</a></p>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
+<li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构02-栈和队列</title>
     <url>/posts/f9c8b94e/</url>
     <content><![CDATA[<p><strong>栈（Stack）</strong>是一种后入先出（Last In First Out, LIFO）的线性数据结构， 只能从一端添加或取出元素，进出元素的一端称为栈顶。<br><strong>队列（Queue）</strong>是一种先入先出（First In First Out, FIFO）的线性数据结构，只能从一端添加元素，从另一端取出元素，添加元素一端称为队尾，取出元素的一端称为队首。</p>
@@ -47,7 +431,7 @@
 <br>
 
 <p>为了方便打印输出，重写一下 <code>toString()</code> 方法。数组栈的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/stacks" target="_blank" rel="noopener">ArrayStack.java</a></p>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Stack: "</span>);</span><br><span class="line">    res.append(<span class="string">'['</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">            res.append(array.get(i));</span><br><span class="line">            <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>)</span><br><span class="line">                res.append(<span class="string">", "</span>);</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] top"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Stack: "</span>);</span><br><span class="line">    res.append(<span class="string">'['</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line"></span><br><span class="line">            res.append(array.get(i));</span><br><span class="line">            <span class="keyword">if</span> (i != array.getSize() - <span class="number">1</span>) {</span><br><span class="line">                res.append(<span class="string">", "</span>);</span><br><span class="line">            }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] top"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <h2 id="1-3-栈的复杂度分析"><a href="#1-3-栈的复杂度分析" class="headerlink" title="1.3 栈的复杂度分析"></a>1.3 栈的复杂度分析</h2><p>由于 <code>push(E e)</code> 和 <code>pop()</code> 操作都是在数组尾操作，因此时间复杂度是 <code>O(1)</code>，如果触发 <code>resize()</code> 操作，按照均摊复杂度分析，整个过程也是 <code>O(1)</code>。</p>
 <table>
@@ -120,7 +504,7 @@
 <br>
 
 <p>为了方便打印输出，重写 <code>toString()</code> 方法。数组队列的整体实现：<a href="https://github.com/Sningning/DataStructures/tree/master/02-Stacks-and-Queues/queue" target="_blank" rel="noopener">ArrayQueue.java</a>。</p>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">    </span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Queue: "</span>);</span><br><span class="line">    res.append(<span class="string">"front ["</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">        res.append(array.get(i));</span><br><span class="line">        <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] tail"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>{</span><br><span class="line">    </span><br><span class="line">    StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    res.append(<span class="string">"Queue: "</span>);</span><br><span class="line">    res.append(<span class="string">"front ["</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; array.getSize() ; i ++) {</span><br><span class="line">        </span><br><span class="line">        res.append(array.get(i));</span><br><span class="line">        <span class="keyword">if</span>(i != array.getSize() - <span class="number">1</span>) {</span><br><span class="line">            res.append(<span class="string">", "</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res.append(<span class="string">"] tail"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <h2 id="2-3-队列的复杂度分析"><a href="#2-3-队列的复杂度分析" class="headerlink" title="2.3 队列的复杂度分析"></a>2.3 队列的复杂度分析</h2><p>由于 <code>enqueue(E e)</code> 操作是在数组尾操作，因此时间复杂度是 <code>O(1)</code>，如果触发 <code>resize()</code> 操作，按照均摊复杂度分析，入队过程也是 <code>O(1)</code>。</p>
 <p>但出队操作是在数组头部进行，底层复用动态数组类中 <code>removeFirst()</code> 方法，因此时间复杂度为 O(n)。</p>
@@ -519,7 +903,7 @@
 
 <div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/delete.gif" width=""> </div>
 
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从数组中删除 index 位置的元素, 返回被删除的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"删除失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E ret = data[index];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = index + <span class="number">1</span> ; i &lt; size ; i ++) {</span><br><span class="line">            data[i - <span class="number">1</span>] = data[i];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    size--;</span><br><span class="line">    data[size] = <span class="keyword">null</span>;  <span class="comment">// 避免对象游离</span></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从数组中删除 index 位置的元素, 返回被删除的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(index &lt; <span class="number">0</span> || index &gt;= size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"删除失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    E ret = data[index];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = index + <span class="number">1</span> ; i &lt; size ; i ++) {</span><br><span class="line">        data[i - <span class="number">1</span>] = data[i];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    size--;</span><br><span class="line">    data[size] = <span class="keyword">null</span>;  <span class="comment">// 避免对象游离</span></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <br>
 
 <p>完成 <code>remove(int index)</code> 方法后，删除数组中第一个元素和最后一个元素，直接复用 <code>remove(int index)</code> 方法，传入相应的索引即可。</p>
@@ -538,7 +922,7 @@
 <div align="center"><img width="" src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/resize2.gif"></div>
 
 
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 数组容量调整</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span> </span>{</span><br><span class="line"></span><br><span class="line">    E[] newData = (E[]) <span class="keyword">new</span> Object[newCapacity];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">        newData[i] = data[i];</span><br><span class="line">    }</span><br><span class="line">    data = newData;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 数组容量调整</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span> </span>{</span><br><span class="line"></span><br><span class="line">    E[] newData = (E[]) <span class="keyword">new</span> Object[newCapacity];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) {</span><br><span class="line">        newData[i] = data[i];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    data = newData;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <br>
 
 <h2 id="6-1-扩容"><a href="#6-1-扩容" class="headerlink" title="6.1 扩容"></a>6.1 扩容</h2><p>扩容，是在添加元素时进行的，前面实现的 <code>add(int index, int e)</code> 方法中，对于数组已满的情况是抛出了异常，现在可以将底层 <code>data</code> 数组进行扩容，扩容的大小设置为当前容量的 <code>2</code> 倍，即 <code>2 * data.length</code>，这里设置的新数组的容量是与现有元素个数相关联的，保证新数组容量和之前数组中元素的个数是一个数量级。 </p>
@@ -547,7 +931,7 @@
           </div>
 <br>
 
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在第 index 个位置插入一个新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">( <span class="keyword">int</span> index, E e )</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( index &lt; <span class="number">0</span> || index &gt; size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 扩容</span></span><br><span class="line">    <span class="keyword">if</span> ( size == data.length ) {</span><br><span class="line">        resize(<span class="number">2</span> * data.length);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt;= index; i--)</span><br><span class="line">        data[i + <span class="number">1</span>] = data[i];</span><br><span class="line"></span><br><span class="line">    data[index] = e;</span><br><span class="line">    size++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 在第 index 个位置插入一个新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">( <span class="keyword">int</span> index, E e )</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( index &lt; <span class="number">0</span> || index &gt; size) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"添加失败，索引非法。"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 扩容</span></span><br><span class="line">    <span class="keyword">if</span> ( size == data.length ) {</span><br><span class="line">        resize(<span class="number">2</span> * data.length);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt;= index; i--) {</span><br><span class="line">        data[i + <span class="number">1</span>] = data[i];</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    data[index] = e;</span><br><span class="line">    size++;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <br>
 
 <h2 id="6-2-缩容"><a href="#6-2-缩容" class="headerlink" title="6.2 缩容"></a>6.2 缩容</h2><p>在删除对象后，可以根据元素个数进行缩容操作。当元素个数小到刚好等于数组长度的一半时，即 <code>size == data.length / 2</code>，将数组缩容为原来长度的一半。暂时这样处理，后续再进行优化。</p>
