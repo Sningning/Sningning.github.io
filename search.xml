@@ -1,6 +1,371 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数据结构04-二分搜索树</title>
+    <url>/posts/523021e3/</url>
+    <content><![CDATA[<blockquote>
+<p>树（英语：tree）是一种抽象数据类型（ADT）或是实现这种抽象数据类型的数据结构，用来模拟具有树状结构性质的数据集合。把它叫做“树”是因为它看起来像一棵倒挂的树。</p>
+<p>二分搜索树（Binary Search Tree，BST）相比于其他数据结构的优势在于查找、插入的时间复杂度较低。为 <code>O(log n)</code>。二分搜索树是基础性数据结构，用于构建更为抽象的数据结构。</p>
+<p><strong><em>维基百科</em></strong></p>
+</blockquote>
+<a id="more"></a>
+
+
+<h1 id="1-BST-基础"><a href="#1-BST-基础" class="headerlink" title="1. BST 基础"></a>1. BST 基础</h1><h2 id="1-1-二叉树"><a href="#1-1-二叉树" class="headerlink" title="1.1 二叉树"></a>1.1 二叉树</h2><p>二叉树（Binary tree）是每个结点最多只有两个分支的树结构。通常分支被称作“左孩子”和“右孩子”或“左子树”和“右子树”。</p>
+<p>二叉树的性质：</p>
+<ul>
+<li>二叉树只有一个根结点</li>
+<li>二叉树每个结点最多有两个孩子</li>
+<li>每个结点最多有一个父亲</li>
+<li>每个结点的左孩子也是一个二叉树</li>
+<li>每个结点的右孩子也是一个二叉树</li>
+</ul>
+<p>二叉树不一定是“满”的，一个结点也是一个二叉树，<code>NULL</code> 也是一个二叉树。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/tree.png" width="500px"> </div>
+
+<h2 id="1-2-BST"><a href="#1-2-BST" class="headerlink" title="1.2 BST"></a>1.2 BST</h2><p>二分搜索树是一种二叉树，除了二叉树的性质之外，二分搜索树还有如下性质：</p>
+<ul>
+<li>二分搜索树中每个结点的值：<ul>
+<li>大于其左子树的所有结点的值</li>
+<li>小于其右子树的所有结点的值</li>
+</ul>
+</li>
+<li>任意结点的左、右子树也分别为二分搜索树</li>
+</ul>
+<p>为了能达到搜索的目的，二分搜索树存储的元素必须有可比较性。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/BST.png" width=""> </div>
+
+<p>二分搜索树类中实现的方法：</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int getSize()</td>
+<td align="center">获取二分搜索树中元素个数</td>
+</tr>
+<tr>
+<td align="center">boolean isEmpty()</td>
+<td align="center">返回二分搜索树是否为空</td>
+</tr>
+<tr>
+<td align="center">void add(E e)</td>
+<td align="center">向二分搜索树中添加新元素 e</td>
+</tr>
+<tr>
+<td align="center">boolean contains(E e)</td>
+<td align="center">查看二分搜索树中是否包含元素 e</td>
+</tr>
+<tr>
+<td align="center">E minimum()</td>
+<td align="center">查找二分搜索树的最小元素</td>
+</tr>
+<tr>
+<td align="center">E maximum()</td>
+<td align="center">查找二分搜索树的最大元素</td>
+</tr>
+<tr>
+<td align="center">void preOrder()</td>
+<td align="center">二分搜索树的前序遍历</td>
+</tr>
+<tr>
+<td align="center">void inOrder()</td>
+<td align="center">二分搜索树的中序遍历</td>
+</tr>
+<tr>
+<td align="center">void postOrder()</td>
+<td align="center">二分搜索树的后序遍历</td>
+</tr>
+<tr>
+<td align="center">void levelOrder()</td>
+<td align="center">二分搜索树的层序遍历</td>
+</tr>
+<tr>
+<td align="center">E removeMin()</td>
+<td align="center">从二分搜索树中删除最小值所在的结点，返回最小值</td>
+</tr>
+<tr>
+<td align="center">E removeMax()</td>
+<td align="center">从二分搜索树中删除最大值所在的结点，返回最大值</td>
+</tr>
+<tr>
+<td align="center">void remove(E e)</td>
+<td align="center">从二分搜索树中删除元素为 e 的结点</td>
+</tr>
+</tbody></table>
+<p>根据二分搜索树的性质，可以将结点信息以及简单的方法先完成。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BST</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">E</span>&gt;&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 结点内部类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> E e;</span><br><span class="line">        <span class="keyword">public</span> Node left, right;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span> </span>{</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.left = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">this</span>.right = <span class="keyword">null</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BST</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.root = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h1 id="2-向-BST-中添加元素"><a href="#2-向-BST-中添加元素" class="headerlink" title="2. 向 BST 中添加元素"></a>2. 向 BST 中添加元素</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void add(E e)</td>
+<td align="center">向二分搜索树中添加新元素 e</td>
+</tr>
+</tbody></table>
+<p>如果当前的二分搜索树为空，那么直接可以将新的元素添加，同时维护 <code>size</code>。</p>
+<p>如果当前二分搜索树不为空，那么需要从根结点出发，先与根结点比较。</p>
+<ul>
+<li>比根结点大，往右子树插入；</li>
+<li>比根结点小，往左子树插入；</li>
+<li>和根结点相等，不做改变；（实现的二分搜索树不包含重复元素）</li>
+</ul>
+<p>这样依次递归下去，知道要插入的位置为空，那么就可以将该元素正确地添加到树中。因此可以写一个递归的方法来实现添加元素的操作。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/add1.gif" width=""> </div>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/add2.gif" width=""> </div>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/add3.gif" width=""> </div>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/add4.gif" width=""> </div>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/add5.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 向二分搜索树中添加新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) {</span><br><span class="line">        root = <span class="keyword">new</span> Node(e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        add(root, e)</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 向以 node 为根的二分搜索树中插入元素 e，递归算法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Node node, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止的条件</span></span><br><span class="line">    <span class="keyword">if</span>(e.equals(node.e)) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (e.compareTo(node.e) &lt; <span class="number">0</span> &amp;&amp; node.left == <span class="keyword">null</span>) {</span><br><span class="line">        node.left = <span class="keyword">new</span> Node(e);</span><br><span class="line">        size++;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (e.compareTo(node.e) &gt; <span class="number">0</span> &amp;&amp; node.right == <span class="keyword">null</span>) {</span><br><span class="line">        node.right = <span class="keyword">new</span> Node(e);</span><br><span class="line">        size++;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归过程</span></span><br><span class="line">    <span class="keyword">if</span>(e.compareTo(node.e) &lt; <span class="number">0</span>) {</span><br><span class="line">        add(node.left, e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {  <span class="comment">//e.compareTo(node.e) &gt; 0</span></span><br><span class="line">        add(node.right, e);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="3-改进添加操作"><a href="#3-改进添加操作" class="headerlink" title="3. 改进添加操作"></a>3. 改进添加操作</h1><p>前面实现的添加操作中，对于 <code>root == null</code> 的情况进行了单独处理，但是提到过，<strong><code>null</code> 也是一个二分搜索树</strong>.因此，如果待插入的元素走到了一个 <code>null</code> 的位置，肯定要在这里新创建一个结点。</p>
+<p>所以将之前递归代码的终止条件中，左右子树为空的条件去掉，让待插入元素再递归一层走到 <code>null</code>，和之前的递归过程相比，相当于多递归了一层，在 <code>null</code> 这个位置新建结点插入，然后将插入结点后的树返回给上一层递归调用，让进入递归前该结点的左子树或右子树接住这个变化，这样完成整个二分搜索树的更新。</p>
+<p>如果待插入的元素和某一个结点元素相等，就直接将该结点返回给上层调用就可以了。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 向二分搜索树中添加新元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span> </span>{</span><br><span class="line">    add(root, e);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 向以 node 为根的二分搜索树中插入元素 e，递归算法</span></span><br><span class="line"><span class="comment">// 返回插入新结点后二分搜索树的根</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">add</span><span class="params">(Node node, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止的条件</span></span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">        size++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node(e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (e.compareTo(node.e) &lt; <span class="number">0</span>) {</span><br><span class="line">        node.left = add(node.left, e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(e.compareTo(node.e) &gt; <span class="number">0</span>) {</span><br><span class="line">        node.right = add(node.right, e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果 e.equals(node.e)，上面代码不执行，直接将该结点返回</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="4-BST-的查询操作"><a href="#4-BST-的查询操作" class="headerlink" title="4. BST 的查询操作"></a>4. BST 的查询操作</h1><p>二分搜索树的查询操作，分为查询指定元素 e 是否存在；查询树中最大元素和最小元素。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">boolean contains(E e)</td>
+<td align="center">查看二分搜索树中是否包含元素 e</td>
+</tr>
+<tr>
+<td align="center">E minimum()</td>
+<td align="center">查找二分搜索树的最小元素</td>
+</tr>
+<tr>
+<td align="center">E maximum()</td>
+<td align="center">查找二分搜索树的最大元素</td>
+</tr>
+</tbody></table>
+<h2 id="4-1-查询指定元素"><a href="#4-1-查询指定元素" class="headerlink" title="4.1 查询指定元素"></a>4.1 查询指定元素</h2><p>要实现在二分搜索树中查询某个特定的元素是否存在，给定元素后，先与根结点比较，后续过程和添加元素操作一样，因此也可以使用递归来实现。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 查看二分搜索树中是否包含元素 e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(E e)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> contains(node, e);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看以 node 为根的二分搜索树中是否包含元素 e，递归算法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Node node, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止的条件</span></span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (e.equals(node.e)) {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (e.compareTo(node.e) &lt; <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> contains(node.left, e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">return</span> contains(node.right, e);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<h2 id="4-2-查询最小元素和最大元素"><a href="#4-2-查询最小元素和最大元素" class="headerlink" title="4.2 查询最小元素和最大元素"></a>4.2 查询最小元素和最大元素</h2><p>根据二分搜索树的性质，当沿着树的左子树一直往下寻找，当到达最左端，也就是结点的左子树为空时，该结点中存储的元素就是整个树中的最小元素，最大元素相反，往右一直寻找。因此，寻找最小元素和最大元素的过程也是递归进行的。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 寻找二分搜索树的最小元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">minimum</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"树为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minimum(root).e;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回以 node 为根的二分搜索树的最小键值所在的结点</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">minimum</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止的条件</span></span><br><span class="line">    <span class="keyword">if</span> (node.left == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minimum(node.left);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 寻找二分搜索树的最大元素（递归实现）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">maximum</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"树为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> maximum(root).e;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回以 node 为根的二分搜索树的最大键值所在的结点</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">maximum</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (node.right == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> maximum(node.right);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>在二分搜索树中寻找最小值和最大值的过程其实和对一个链表进行遍历是一样的操作，因此完全可以使用一个循环来找到相应的最小值和最大值。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 寻找二分搜索树的最小元素（非递归实现）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">minimumNR</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"树为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node cur = root;</span><br><span class="line">    <span class="keyword">while</span> (cur.left != <span class="keyword">null</span>) {</span><br><span class="line">        cur = cur.left;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> cur.e;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 寻找二分搜索树的最大元素（非递归实现）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">maximumNR</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"树为空。"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    Node cur = root;</span><br><span class="line">    <span class="keyword">while</span> (cur.right != <span class="keyword">null</span>) {</span><br><span class="line">        cur = cur.right;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> cur.e;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="5-BST-的前、中、后序遍历"><a href="#5-BST-的前、中、后序遍历" class="headerlink" title="5. BST 的前、中、后序遍历"></a>5. BST 的前、中、后序遍历</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void preOrder()</td>
+<td align="center">二分搜索树的前序遍历</td>
+</tr>
+<tr>
+<td align="center">void inOrder()</td>
+<td align="center">二分搜索树的中序遍历</td>
+</tr>
+<tr>
+<td align="center">void postOrder()</td>
+<td align="center">二分搜索树的后序遍历</td>
+</tr>
+</tbody></table>
+<p>与添加和查询操作不同，二分搜索树的遍历操作要将二分搜索树所有的结点都访问一遍，而非仅仅是左子树或右子树。</p>
+<p>运用递归操作，依然可以方便地对二分搜索树进行遍历操作。用递归方法遍历以 <code>node</code> 为根的二分搜索树，整体思路如下：</p>
+<ul>
+<li>开始：<ul>
+<li><code>node</code> 为空：直接返回</li>
+<li><code>node</code> 不为空：<ul>
+<li>访问 <code>node</code></li>
+<li>遍历 <code>node.left</code></li>
+<li>遍历 <code>node.right</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>结束</li>
+</ul>
+<p>其中，递归调用发生在遍历左子树和右子树的操作中。根据访问 <code>node</code> 的顺序不同，遍历可以分为前序遍历、中序遍历、后序遍历。这里定义访问 <code>node</code> 的操作为打印 <code>node</code> 结点存储的元素。</p>
+<br>
+
+<h2 id="5-1-前序遍历"><a href="#5-1-前序遍历" class="headerlink" title="5.1 前序遍历"></a>5.1 前序遍历</h2><p>最主要的是实现遍历的递归函数。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 二分搜索树的前序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">()</span> </span>{</span><br><span class="line">    preOrder(root);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 前序遍历以 node 为根的二分搜索树，递归算法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止条件</span></span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    System.out.println(node.e);</span><br><span class="line">    preOrder(node.left);</span><br><span class="line">    preOrder(node.right);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<h2 id="5-2-中序遍历"><a href="#5-2-中序遍历" class="headerlink" title="5.2 中序遍历"></a>5.2 中序遍历</h2><p>中序遍历无非是把访问该结点信息的操作放在访问左子树和右子树中间，根据二分搜索树的性质可以知道，该结点左子树均是小于该结点的，右子树都是大于该结点的，因此，二分搜索树中序遍历的结果是顺序的。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 二分搜索树的中序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrder</span><span class="params">()</span> </span>{</span><br><span class="line">    inOrder(root);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中序遍历以 node 为根的二分搜索树，递归算法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inOrder</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止条件</span></span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    inOrder(node.left);</span><br><span class="line">    System.out.println(node.e);</span><br><span class="line">    inOrder(node.right);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<h2 id="5-3-后序遍历"><a href="#5-3-后序遍历" class="headerlink" title="5.3 后序遍历"></a>5.3 后序遍历</h2><p>后序遍历就是先访问该结点的左子树，再访问该结点的右子树，最后访问该结点。后序遍历的一个应用就是释放二分搜索树的内存，如果手动释放内存，就需要先将孩子结点的内存释放，最后再释放该结点的内存。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 二分搜索树的后序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">()</span> </span>{</span><br><span class="line">    postOrder(root);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后序遍历以 node 为根的二分搜索树，递归算法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止条件</span></span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    postOrder(node.left);</span><br><span class="line">    postOrder(node.right);</span><br><span class="line">    System.out.println(node.e);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<h2 id="5-4-再理解-BST-的遍历"><a href="#5-4-再理解-BST-的遍历" class="headerlink" title="5.4 再理解 BST 的遍历"></a>5.4 再理解 BST 的遍历</h2><p>对于二分搜索树的遍历，程序编写是简单的，但是如果面对一颗二分搜索树，怎样快速手写出前中后序遍历结果？</p>
+<p>对于二分搜索树的每个结点，都有 3 次访问机会，分别是访问该结点左子树之前；访问左子树和右子树之间；访问右子树之后。分别对应下图的 3 个紫色的点。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/遍历.png" width="600px"> </div> <br>
+
+<p>前序遍历过程中，真正打印该结点是在第 1 次访问该结点的时候。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/preOrder.gif" width=""> </div> <br>
+
+
+<p>中序遍历过程中，真正打印该结点是在第 2 次访问该结点的时候。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/inOrder.gif" width=""> </div> <br>
+
+<p>后序遍历过程中，真正打印该结点是在第 3 次访问该结点的时候。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/postOrder.gif" width=""> </div>
+
+<hr>
+<h1 id="6-BST-前序遍历的非递归实现"><a href="#6-BST-前序遍历的非递归实现" class="headerlink" title="6. BST 前序遍历的非递归实现"></a>6. BST 前序遍历的非递归实现</h1><p>利用栈来实现前序遍历，根据栈结构后入先出的性质，栈顶元素是要访问的元素，先访问该元素，然后将该元素弹出栈，随后将该结点的孩子压入栈，入栈顺序是右孩子先入栈，然后左孩子再入栈，这样，栈顶元素就是左孩子，然后访问左孩子，弹出栈，再依次压入它的右孩子和左孩子，依次进行。当栈为空时，完成遍历。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/preOrderNR.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 二分搜索树的非递归前序遍历，非递归实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrderNR</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    stack.push(root);</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) {</span><br><span class="line"></span><br><span class="line">        Node cur = stack.pop();</span><br><span class="line">        System.out.println(cur.e);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (cur.right != <span class="keyword">null</span>) {  <span class="comment">// 右孩子先入栈</span></span><br><span class="line">            stack.push(cur.right);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (cur.left != <span class="keyword">null</span>) {</span><br><span class="line">            stack.push(cur.left); </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="7-BST-的层序遍历"><a href="#7-BST-的层序遍历" class="headerlink" title="7. BST 的层序遍历"></a>7. BST 的层序遍历</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void levelOrder()</td>
+<td align="center">二分搜索树的层序遍历</td>
+</tr>
+</tbody></table>
+<p>二分搜索树的前中后序遍历都是在树的一侧一插到底，然后往回递归。层序遍历就是对于一个树，一层一层地对每个结点进行操作，层序遍历又称为<strong>广度优先遍历</strong>，相对应的，二分搜索树的前中后序遍历又称为<strong>深度优先遍历</strong>。对于二分搜索树的层序遍历，多是使用非递归实现，这里使用队列这种数据结构来实现二分搜索树的层序遍历。</p>
+<p>队首元素是当前需要操作的元素，将队首元素出队，操作完成后，将该元素的左孩子和右孩子依次入队，知道队列为空，此时完成层序遍历。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/levelOrder.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 二分搜索树的层序遍历（广度优先遍历）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">levelOrder</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    Queue&lt;E&gt; queue = <span class="keyword">new</span> Queue&lt;&gt;();</span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) {</span><br><span class="line"></span><br><span class="line">        Node cur = queue.remove();</span><br><span class="line">        System.out.println(cur.e);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (cur.left != <span class="keyword">null</span>) {  <span class="comment">// 左孩子先入队</span></span><br><span class="line">            queue.add(cur.left);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (cur.right != <span class="keyword">null</span>) {</span><br><span class="line">            queue.add(cur.right); </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<p>广度优先遍历有时可以更快的找到指定的元素，如下图所示，当要找的元素在红点位置，但使用深度优先遍历会直接先插到底部从左边寻找，而这是如果采用广度优先遍历便可以很快找到答案。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/levelOrder1.gif" width=""> </div>
+
+<p>在图中也存在深度优先遍历和广度优先遍历，不过在图中进行遍历时，需要记录一下该结点之前是否遍历过，因为对于图来说，每一个结点的前驱可能有多个。</p>
+<hr>
+<h1 id="8-删除-BST-中最小元素和最大元素"><a href="#8-删除-BST-中最小元素和最大元素" class="headerlink" title="8. 删除 BST 中最小元素和最大元素"></a>8. 删除 BST 中最小元素和最大元素</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">E removeMin()</td>
+<td align="center">从二分搜索树中删除最小值所在的结点，返回最小值</td>
+</tr>
+<tr>
+<td align="center">E removeMax()</td>
+<td align="center">从二分搜索树中删除最大值所在的结点，返回最大值</td>
+</tr>
+</tbody></table>
+<p>最小元素和最大元素所在的结点可能是叶子结点也可能不是叶子结点。</p>
+<h2 id="8-1-删除-BST-中最小元素"><a href="#8-1-删除-BST-中最小元素" class="headerlink" title="8.1 删除 BST 中最小元素"></a>8.1 删除 BST 中最小元素</h2><p>如果最小元素所在的结点是叶子结点，可以直接将其删除。但是当待删除的结点有右子树时，将该结点删除后，还要再把其右子树赋给其父亲结点，也就是该结点左子树的根结点接替了该结点的位置。由于 <code>null</code> 也可以看做一个结点，因此，两个过程可以统一。最后维护 <code>size</code>。这里复用了之前的 <code>minmum()</code> 方法，因此不需要再对空树进行判断。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/removeMin.gif" width=""> </div>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/removeMin2.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从二分搜索树中删除最小值所在的结点，返回最小值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">removeMin</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    E ret = minmum();</span><br><span class="line">    root = removeMin(root);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除掉以 node 为根的二分搜索树中的最小结点</span></span><br><span class="line"><span class="comment">// 返回删除结点后新的二分搜索树的根</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">removeMin</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归终止条件</span></span><br><span class="line">    <span class="keyword">if</span> (node.left == <span class="keyword">null</span>) {</span><br><span class="line"></span><br><span class="line">        Node rightNode = node.right;</span><br><span class="line">        node.right = <span class="keyword">null</span>;</span><br><span class="line">        size--;</span><br><span class="line">        <span class="keyword">return</span> rightNode;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    node.left = removeMin(node.left);</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<br>
+
+<h2 id="8-2-删除-BST-中最大元素"><a href="#8-2-删除-BST-中最大元素" class="headerlink" title="8.2 删除 BST 中最大元素"></a>8.2 删除 BST 中最大元素</h2><p>删除最大元素和删除最小元素刚好相反，只需保存待删除结点的左子树即可。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从二分搜索树中删除最大值所在的结点，返回最大值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">removeMax</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    E ret = maximum();</span><br><span class="line">    root = removeMax(root);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除掉以 node 为根的二分搜索树中的最大结点</span></span><br><span class="line"><span class="comment">// 返回删除结点后新的二分搜索树的根</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">removeMax</span><span class="params">(Node node)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (node.right == <span class="keyword">null</span>) {</span><br><span class="line"></span><br><span class="line">        Node leftNode = node.left;</span><br><span class="line">        node.left = <span class="keyword">null</span>;</span><br><span class="line">        size--;</span><br><span class="line">        <span class="keyword">return</span> leftNode;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    node.right = removeMax(node.right);</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h1 id="9-删除-BST-中任意元素"><a href="#9-删除-BST-中任意元素" class="headerlink" title="9. 删除 BST 中任意元素"></a>9. 删除 BST 中任意元素</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void remove(E e)</td>
+<td align="center">从二分搜索树中删除元素为 e 的结点</td>
+</tr>
+</tbody></table>
+<p>删除任意元素时，也是分成 3 种情况：</p>
+<ul>
+<li>待删除元素所在结点左子树为空</li>
+<li>待删除元素所在结点右子树为空</li>
+<li>待删除元素所在结点左右子树都存在</li>
+</ul>
+<p>前两种情况和删除最小元素和最大元素是类似：<br>如果左子树为空，暂存右子树，将该结点删除，然后将右子树的根结点返回给上一层递归调用；<br>如果右子树为空，暂存左子树，将该结点删除，然后将左子树的根结点返回给上一层递归调用。</p>
+<p>当待删除元素所在结点左右子树都存在时，这里采用<strong>Hibbard Deletion</strong>。</p>
+<div class="note primary">
+            <p><strong>Delete</strong>. We can proceed in a similar manner to delete any node that has one child (or no children), but what can we do to delete a node that has two children? We are left with two links, but have a place in the parent node for only one of them. An answer to this dilemma, first proposed by T. Hibbard in 1962, is to delete a node x by replacing it with its successor. Because x has a right child, its successor is the node with the smallest key in its right subtree. The replacement preserves order in the tree because there are no keys between x.key and the successor’s key. We accomplish the task of replacing x by its successor in four (!) easy steps:</p><ul><li>Save a link to the node to be deleted in t</li><li>Set x to point to its successor min(t.right).</li><li>Set the right link of x (which is supposed to point to the BST containing all the keys larger than x.key) to deleteMin(t.right), the link to the BST containing all the keys that are larger than x.key after the deletion.</li><li>Set the left link of x (which was null) to t.left (all the keys that are less than both the deleted key and its successor).</li></ul><p><strong><em>Algorithms(4th edition) P410</em></strong></p>
+          </div>
+
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/Algorithms(4th edition).png" width=""> </div>
+
+<p>再来几个动画演示。</p>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/visualgo.net.gif" width=""> </div> <br>
+
+<p>一句话概括就是，找到待删除结点右子树中的最小值所在结点，用此结点接替待删除的结点。简单描述下过程：</p>
+<p>d 为待删除结点</p>
+<ul>
+<li>找到 s = min( s-&gt;right ), s 是 d 的后继</li>
+<li>s-&gt;right = delMin( d-&gt;right )</li>
+<li>s-&gt;left = d-&gt;left</li>
+<li>删除 d, s 是新的子树的根</li>
+</ul>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/04-BST/remove.gif" width=""> </div>
+
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 从二分搜索树中删除元素为 e 的结点</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">remove</span><span class="params">(E e)</span> </span>{</span><br><span class="line">  remove(root, e);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除掉以 node 为根的二分搜索树中值为e的结点, 递归算法</span></span><br><span class="line"><span class="comment">// 返回删除结点后新的二分搜索树的根</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">remove</span><span class="params">(Node node, E e)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (e.compareTo(node.e) &lt; <span class="number">0</span>) {</span><br><span class="line">        node.left = remove(node.left, e);</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (e.compareTo(node.e) &gt; <span class="number">0</span>) {</span><br><span class="line">        node.right = remove(node.right, e);</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {  <span class="comment">// e.compareTo(node.e) == 0</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 待删除结点左子树为空的情况</span></span><br><span class="line">        <span class="keyword">if</span> (node.left == <span class="keyword">null</span>) {</span><br><span class="line">            Node rightNode = node.right;</span><br><span class="line">            node.right = <span class="keyword">null</span>;</span><br><span class="line">            size--;</span><br><span class="line">            <span class="keyword">return</span> rightNode;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 待删除结点右子树为空的情况</span></span><br><span class="line">        <span class="keyword">if</span> (node.right == <span class="keyword">null</span>) {</span><br><span class="line">            Node leftNode = node.left;</span><br><span class="line">            node.left = <span class="keyword">null</span>;</span><br><span class="line">            size--;</span><br><span class="line">            <span class="keyword">return</span> leftNode;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 待删除结点左右子树均不为空的情况</span></span><br><span class="line">        <span class="comment">// 找到比待删除结点大的最小结点, 即待删除结点右子树的最小结点</span></span><br><span class="line">        <span class="comment">// 用这个结点顶替待删除结点的位置</span></span><br><span class="line">        Node successor = minimum(node.right);</span><br><span class="line">        successor.right = removeMin(node.right);</span><br><span class="line">        successor.left = node.left;</span><br><span class="line">        node.left = node.right = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> successor;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在最后一个 <code>else</code> 语句中，用了 2 个 <code>if</code>，而没有使用 <code>else if</code>，这是因为满足进入第一个 <code>if</code> 之后，里面直接 <code>return</code> 了，不会再去进行另一个 <code>if</code> 了，因此用 2 个 <code>if</code> 是没问题的。</p>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://visualgo.net/zh" target="_blank" rel="noopener">VisuAlgo</a></li>
+<li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
+<li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构03-链表</title>
     <url>/posts/ee7bd491/</url>
     <content><![CDATA[<p><strong>链表（Linked list）</strong> 是一种 <strong>动态</strong> 的线性数据结构，但并不是按线性的顺序存储数据。链表通常由一连串结点（Node）组成，每个节点包含任意的实例数据（data fields）和一或两个用来指向上一个/或下一个节点的位置的引用（prev或next）。<br>链表的优点是不需要处理固定容量的问题，但是链表失去了数组随机读取的优点。</p>
@@ -354,6 +719,7 @@
 <hr>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://visualgo.net/zh" target="_blank" rel="noopener">VisuAlgo</a></li>
 <li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
 <li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
 </ul>
@@ -606,6 +972,7 @@
 <hr>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://visualgo.net/zh" target="_blank" rel="noopener">VisuAlgo</a></li>
 <li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
 <li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
 </ul>
@@ -640,7 +1007,7 @@
     <title>数据结构01-数组</title>
     <url>/posts/bb3e32af/</url>
     <content><![CDATA[<blockquote>
-<p>数组（Array），是由相同类型的元素（element）的集合所组成的数据结构，分配一块<strong>连续</strong>的内存来存储。利用元素的索引（index）可以计算出该元素对应的存储地址。——维基百科</p>
+<p>数组（Array），是由相同类型的元素（element）的集合所组成的数据结构，分配一块<strong>连续</strong>的内存来存储。利用元素的索引（index）可以计算出该元素对应的存储地址。<strong><em>维基百科</em></strong></p>
 </blockquote>
 <p>数组最大的优点就是<strong>快速查询</strong>。</p>
 <a id="more"></a>
@@ -898,7 +1265,7 @@
 <h2 id="5-2-删除元素"><a href="#5-2-删除元素" class="headerlink" title="5.2 删除元素"></a>5.2 删除元素</h2><p>数组中的元素都是连续存储，因此删除操作实际上也是元素移动的过程，具体执行删除操作时，直接将待删除索引位置后面的元素依次向前移动覆盖，前移过程必须是待删除索引位置后第一个位置元素先进行移动。</p>
 <p>当最后的元素 56 向前移动后，维护了 <code>size</code>，此时 <code>size</code> 指向了索引为 5 位置的 56，该元素用户是访问不到的。但是由于使用了泛型，所以实际上 <code>size</code> 还是指向了一个对象的引用，Java 的垃圾回收机制无法对其进行回收， 应该手动进行释放。</p>
 <div class="note primary">
-            <p>Java 的垃圾收集策略是回收所有无法被访问的对象的内存。在我们对 pop() 的实现中，被弹出的元素的引用仍然存在于数组中。这个元素实际上已经是一个孤儿了——它永远不会再被访问，但 Java 的垃圾收集器无法知道这一点，除非该引用被覆盖。即使用例不再需要这个元素了，数组中的引用仍然可以让它继续存在。这种情况（保存一个不需要的对象的引用）成为<strong>游离(loitering)</strong>。在这里，避免对象游离很容易，只需将被弹出的数组元素的值设为 null 即可。这将覆盖无用的引用并使系统可以在用例使用完被弹出的元素后回收它的内存。——《算法(第4版)》 P85</p>
+            <p>Java 的垃圾收集策略是回收所有无法被访问的对象的内存。在我们对 pop() 的实现中，被弹出的元素的引用仍然存在于数组中。这个元素实际上已经是一个孤儿了——它永远不会再被访问，但 Java 的垃圾收集器无法知道这一点，除非该引用被覆盖。即使用例不再需要这个元素了，数组中的引用仍然可以让它继续存在。这种情况（保存一个不需要的对象的引用）成为<strong>游离(loitering)</strong>。在这里，避免对象游离很容易，只需将被弹出的数组元素的值设为 null 即可。这将覆盖无用的引用并使系统可以在用例使用完被弹出的元素后回收它的内存。<strong><em>算法(第4版) P85</em></strong></p>
           </div>
 
 <div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/01-Array/delete.gif" width=""> </div>
@@ -1022,6 +1389,7 @@
 <hr>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a href="https://coding.imooc.com/class/207.html" target="_blank" rel="noopener">玩转数据结构</a></li>
+<li><a href="https://visualgo.net/zh" target="_blank" rel="noopener">VisuAlgo</a></li>
 <li><a href="https://book.douban.com/subject/19952400/" target="_blank" rel="noopener">算法(第4版)</a></li>
 <li><a href="https://book.douban.com/subject/10432347/" target="_blank" rel="noopener">Algorithms(4th edition)</a></li>
 </ul>
