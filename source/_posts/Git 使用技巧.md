@@ -21,7 +21,7 @@ date: 2020-04-04 14:10:40
 
 查看当前本地仓库对应的远程仓库地址：
 
-```
+```git
 $ git remote -v
 origin  https://github.com/Sningning/DataStructures.git (fetch)
 origin  https://github.com/Sningning/DataStructures.git (push)
@@ -29,14 +29,22 @@ origin  https://github.com/Sningning/DataStructures.git (push)
 
 切换为 SSH 通道：
 
-```
+```git
 $ git remote set-url origin git@github.com:Sningning/DataStructures.git
 ```
 
 再查看下，已经改为 SSH 通道了。
 
-```
+```git
 $ git remote -v
 origin  git@github.com:Sningning/DataStructures.git (fetch)
 origin  git@github.com:Sningning/DataStructures.git (push)
+```
+
+# 2. 测试 GitHub 连接
+
+> 2020.04.08
+
+```git
+$ ssh -T git@github.com
 ```
