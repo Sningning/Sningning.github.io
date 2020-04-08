@@ -628,8 +628,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>JDBC</tag>
+        <tag>Java</tag>
         <tag>数据库</tag>
       </tags>
   </entry>
@@ -652,6 +652,7 @@
 <p>再查看下，已经改为 SSH 通道了。</p>
 <figure class="highlight plain"><table><tbody><tr><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  git@github.com:Sningning/DataStructures.git (fetch)</span><br><span class="line">origin  git@github.com:Sningning/DataStructures.git (push)</span><br></pre></td></tr></tbody></table></figure>
 
+<hr>
 <h1 id="2-测试-GitHub-连接"><a href="#2-测试-GitHub-连接" class="headerlink" title="2. 测试 GitHub 连接"></a>2. 测试 GitHub 连接</h1><blockquote>
 <p>2020.04.08</p>
 </blockquote>
@@ -1043,8 +1044,8 @@
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>Java</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -1428,8 +1429,8 @@
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>Java</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -1681,8 +1682,8 @@
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>Java</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -2098,8 +2099,8 @@
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>Java</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
