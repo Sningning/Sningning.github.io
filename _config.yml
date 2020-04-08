@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://sningning.gitee.io/
+url: https://sningning.github.io/
 root: /
 permalink: posts/:abbrlink/  # 此处可以自己设置，也可以直接使用 :/abbrlink
 abbrlink:
