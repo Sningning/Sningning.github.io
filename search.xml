@@ -1,6 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>用 size 变量解耦 front 和 last 实现循环队列</title>
+    <url>/posts/15ce7a39/</url>
+    <content><![CDATA[<p>用数组实现循环队列和双端循环队列，并用<code>size</code>变量实现解耦<code>front</code>和<code>last</code>。</p>
+<hr>
+<a id="more"></a>
+
+<p>LeetCode 中 第【<a href="https://leetcode-cn.com/problems/design-circular-queue" target="_blank" rel="noopener">622</a>】题是设计一个循环队列，把题目抄过来：</p>
+<blockquote>
+<p>设计你的循环队列实现。 循环队列是一种线性数据结构，其操作表现基于 FIFO（先进先出）原则并且队尾被连接在队首之后以形成一个循环。它也被称为“环形缓冲器”。</p>
+<p>循环队列的一个好处是我们可以利用这个队列之前用过的空间。在一个普通队列里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。但是使用循环队列，我们能使用这些空间去存储新的值。</p>
+<p>你的实现应该支持如下操作：</p>
+<ul>
+<li>MyCircularQueue(k): 构造器，设置队列长度为 k 。</li>
+<li>Front: 从队首获取元素。如果队列为空，返回 -1 。</li>
+<li>Rear: 获取队尾元素。如果队列为空，返回 -1 。</li>
+<li>enQueue(value): 向循环队列插入一个元素。如果成功插入则返回真。</li>
+<li>deQueue(): 从循环队列中删除一个元素。如果成功删除则返回真。</li>
+<li>isEmpty(): 检查循环队列是否为空。</li>
+<li>isFull(): 检查循环队列是否已满。</li>
+</ul>
+</blockquote>
+<hr>
+<p>之前用数组设计循环队列，里面为了判断元素位置，<code>front</code> 和 <code>last</code> 两个变量算来算去，很是糊涂。后来看了左程云老师的一节课，里面讲了下用数组实现循环队列，最主要的是，用<code>size</code>变量来实现了<code>front</code>和<code>last</code>两个指针的解耦，很清爽，总结一下。</p>
+<p>我们用数组实现循环队列。定义一个数组<code>arr</code>来记录数据，定义变量<code>size</code>来记录当前数组或者队列的元素个数。</p>
+<p>显然，当<code>size == arr.length</code>时，队列已经满了，就不能再添加元素了；当<code>size != arr.length</code>时，说明还有空位，可以新加元素。所以，我们是<strong>通过<code>size</code>和<code>arr.length</code>的关系来判断是否能添加元素</strong>。后续的工作就是维护好<code>size</code>这个重要的变量。</p>
+<p>此外，还需要定义<code>front</code>指针和<code>last</code>指针。<strong><code>front</code>指针永远指向队列头部的那个元素</strong>；<strong><code>last</code>指针永远指向队尾最后一个元素的后一个位置</strong>，也就是新元素待插入的位置。<br><br><br>有了<code>size</code>变量后，一切变得简单。</p>
+<ul>
+<li><p><code>enQueue(int value)</code>操作：因为 last 的位置就是新元素待插入的位置，因此直接将新元素放到last位置，维护 size。那么怎样维护 last 指针呢？有两种情况：</p>
+<ul>
+<li><p>情况 1：last 当前指向的不是数组最后一个位置，即 <code>last != arr.length - 1</code>，此时，直接 last++ 就好；</p>
+</li>
+<li><p>情况 2：last 当前指向数组最后一个位置，即 <code>last == arr.length - 1</code>，此时，last 再往后的话就越界了，所以要从头开始，即 last = 0。</p>
+</li>
+</ul>
+<br>   
+</li>
+<li><p><code>deQueue()</code>操作：因为front指针指的就是队首元素，所以我们只需要后移 front 指针就可以实现出队操作，同时维护 size。这时也有两种情况：</p>
+<ul>
+<li><p>情况 1：front 不在数组最后位置，因为不在最后，所以可以放心的执行 front++；</p>
+</li>
+<li><p>情况 2：front 位于数组最后位置，即<code>front==arr.length - 1</code>，这时，front 后移的操作变成了 front 回到数组第一个位置，即<code>front = 0</code>。</p>
+</li>
+</ul>
+<br>
+</li>
+<li><p><code>Front()</code>操作：很简单，因为 front 指针永远指向队首元素，所以返回<code>arr[front]</code>即可。</p>
+</li>
+</ul>
+<br>
+
+<ul>
+<li><code>Rear()</code>操作：因为 last 并不是指向队尾元素，而是队尾元素后面那个位置，所以需要判断下 last 当前的位置是不是在数组的第一个位置，如果是，那么队尾元素就是数组最后一个元素；否则直接返回 last 前面那个元素即可。</li>
+</ul>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/Sningning/BlogPictures/02-Stacks-and-Queues/CircularQueue.gif" width=""> </div>
+
+<p>这样思考的话，写代码就比较容易了。</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] arr;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> front;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> last;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Initialize your data structure here. Set the size of the queue to be k. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyCircularQueue</span><span class="params">(<span class="keyword">int</span> k)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (k &lt; <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Queue size is less than 0!"</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">this</span>.arr = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.front = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.last = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Insert an element into the circular queue. Return true if the operation is successful. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">enQueue</span><span class="params">(<span class="keyword">int</span> value)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == arr.length) {</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        arr[last] = value;</span><br><span class="line">        size ++;</span><br><span class="line">        last = last == arr.length - <span class="number">1</span> ? <span class="number">0</span> : last + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Delete an element from the circular queue. Return true if the operation is successful. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">deQueue</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        front = front == arr.length - <span class="number">1</span> ? <span class="number">0</span> : front + <span class="number">1</span>;</span><br><span class="line">        size--;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Get the front item from the queue. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Front</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> arr[front];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Get the last item from the queue. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Rear</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> last == <span class="number">0</span> ? arr[arr.length - <span class="number">1</span>] : arr[last - <span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Checks whether the circular queue is empty or not. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Checks whether the circular queue is full or not. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFull</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == arr.length;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>【<a href="https://leetcode-cn.com/problems/design-circular-deque/" target="_blank" rel="noopener">641</a>】题也是设计一个循环队列，不过是双端循环队列，即在队列两头都可以删除或添加元素。把题目抄过来：</p>
+<blockquote>
+<p>设计实现双端队列。<br>你的实现需要支持以下操作：</p>
+<ul>
+<li>MyCircularDeque(k)：构造函数,双端队列的大小为k。</li>
+<li>insertFront()：将一个元素添加到双端队列头部。 如果操作成功返回 true。</li>
+<li>insertLast()：将一个元素添加到双端队列尾部。如果操作成功返回 true。</li>
+<li>deleteFront()：从双端队列头部删除一个元素。 如果操作成功返回 true。</li>
+<li>deleteLast()：从双端队列尾部删除一个元素。如果操作成功返回 true。</li>
+<li>getFront()：从双端队列头部获得一个元素。如果双端队列为空，返回 -1。</li>
+<li>getRear()：获得双端队列的最后一个元素。 如果双端队列为空，返回 -1。</li>
+<li>isEmpty()：检查双端队列是否为空。</li>
+<li>isFull()：检查双端队列是否满了。</li>
+</ul>
+</blockquote>
+<p>可以看出来总体思路和 622 题差不多，多了<code>insertFront()</code>和<code>deleteLast()</code>两个方法。剩下的方法实现照搬 622 题。</p>
+<p>我们还是通过<code>size</code>和<code>arr.length</code>的关系来判断是否能添加或者删除元素，实现 front 和 last 的解耦。</p>
+<ul>
+<li><code>insertFront()</code>操作：由于 front 是队首元素的位置，要在队首插入元素，就是要在 front 前面一个位置插入元素，这时候还是两种情况：<ul>
+<li>情况 1：front 不是指向数组第一个位置，这时候直接将新元素插入到 front - 1 位置即可，然后 front–，同时维护 size；</li>
+<li>情况 2：front 指向数组最后一个位置，此时，要插入的元素位置应该是数组最后位置，即<code>arr.length - 1</code>位置，然后维护 front 和 size。</li>
+</ul>
+</li>
+</ul>
+<br>
+
+<ul>
+<li><code>deleteLast()</code>操作：由于 last 指向队尾元素的后一个位置，所以从队尾删除元素，就是删除 last 前面那个元素，两种情况：<ul>
+<li>情况 1：last 不是指向数组第一个位置，此时直接维护 last– 即可；</li>
+<li>情况 2：last 指向数组第一个位置，这是 last 前面的元素就是数组最后一个位置的元素，这是，只需让 last 指向数组最后一个位置即可。</li>
+</ul>
+</li>
+</ul>
+<p>直接上代码：</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span>[] arr;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">int</span> front;</span><br><span class="line">    <span class="keyword">int</span> last;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Initialize your data structure here. Set the size of the deque to be k. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyCircularDeque</span><span class="params">(<span class="keyword">int</span> k)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (k &lt; <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Deque size is less than 0!"</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">this</span>.arr = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.front = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.last = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Adds an item at the front of Deque. Return true if the operation is successful. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">insertFront</span><span class="params">(<span class="keyword">int</span> value)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == arr.length) {</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (front == <span class="number">0</span>) {</span><br><span class="line">            arr[arr.length - <span class="number">1</span>] = value;</span><br><span class="line">            front = arr.length - <span class="number">1</span>;</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            arr[--front] = value;</span><br><span class="line">        }</span><br><span class="line">        size ++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Adds an item at the rear of Deque. Return true if the operation is successful. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">insertLast</span><span class="params">(<span class="keyword">int</span> value)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == arr.length) {</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        arr[last] = value;</span><br><span class="line">        size ++;</span><br><span class="line">        last = last == arr.length - <span class="number">1</span> ? <span class="number">0</span> : last + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Deletes an item from the front of Deque. Return true if the operation is successful. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">deleteFront</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        front = front == arr.length - <span class="number">1</span> ? <span class="number">0</span> : front + <span class="number">1</span>;</span><br><span class="line">        size--;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Deletes an item from the rear of Deque. Return true if the operation is successful. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">deleteLast</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (last == <span class="number">0</span>) {</span><br><span class="line">            last = arr.length - <span class="number">1</span>;</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            last --;</span><br><span class="line">        }</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Get the front item from the deque. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFront</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> arr[front];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Get the last item from the deque. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getRear</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> last == <span class="number">0</span> ? arr[arr.length - <span class="number">1</span>] : arr[last - <span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Checks whether the circular deque is empty or not. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Checks whether the circular deque is full or not. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFull</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == arr.length;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JDBC 技术</title>
     <url>/posts/17d7368a/</url>
     <content><![CDATA[<p>Java 数据库连接，（Java Database Connectivity，简称JDBC）是 Java 语言中用来规范客户端程序如何来访问数据库的应用程序接口，提供了诸如查询和更新数据库中数据的方法。JDBC是面向关系型数据库的。</p>
