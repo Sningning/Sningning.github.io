@@ -238,7 +238,7 @@ public class JDBCUtils {
 通过调用 Connection 对象的 createStatement() 方法创建该对象。该对象用于执行静态的 SQL 语句，并且返回执行结果。
 
 Statement 接口中定义了下列方法用于执行 SQL 语句：
-  
+
 | 方法 | 说明 |
 | :--: | :--:|
 | int excuteUpdate(String sql) | 执行更新操作 INSERT、UPDATE、DELETE |
@@ -514,9 +514,9 @@ ResultSetMetaData 中的部分抽象方法：
 - 面向接口编程的思想
 
 - ORM 思想(object relational mapping)
-  - 一个数据表对应一个java类
-  - 表中的一条记录对应java类的一个对象
-  - 表中的一个字段对应java类的一个属性
+  - 一个数据表对应一个 Java 类
+  - 表中的一条记录对应 Java 类的一个对象
+  - 表中的一个字段对应 Java 类的一个属性
 
   > sql 是需要结合列名和表的属性名来写。注意起别名。
 
@@ -525,7 +525,6 @@ ResultSetMetaData 中的部分抽象方法：
   - 获取列数：getColumnCount()
   - 获取列的别名：getColumnLabel()
 - 通过反射，创建指定类的对象，获取指定的属性并赋值
-
 
 ---
 
@@ -549,7 +548,7 @@ MySQL 的四种 BLOB 类型(除了在存储的最大信息量上不同外，他�
 
 实际使用中根据需要存入的数据大小定义不同的 BLOB 类型。如果存储的文件过大，数据库的性能会下降。
 
-如果在指定了相关的Blob类型以后，还报错：xxx too large，那么在mysql的安装目录下，找 my.ini 文件加上如下的配置参数： `max_allowed_packet=16M`。同时注意：修改了my.ini文件之后，需要重新启动 mysql 服务。
+如果在指定了相关的 Blob 类型以后，还报错：xxx too large，那么在 MySQL 的安装目录下，找 my.ini 文件加上如下的配置参数： `max_allowed_packet=16M`。同时注意：修改了my.ini文件之后，需要重新启动 mysql 服务。
 
 
 ## 4.2 向数据表中插入大数据类型
@@ -925,7 +924,7 @@ MySQL 支持 4 种事务隔离级别。MySQL 默认的事务隔离级别为: **R
 ### 6.3.3 在 MySQL 中设置隔离级别
 
 
-每启动一个 mysql 程序, 就会获得一个单独的数据库连接. 每个数据库连接都有一个全局变量 @@tx_isolation, 表示当前的事务隔离级别。
+每启动一个 MySQL 程序, 就会获得一个单独的数据库连接. 每个数据库连接都有一个全局变量 @@tx_isolation, 表示当前的事务隔离级别。
 
 - 查看当前的隔离级别: 
 
@@ -1378,7 +1377,7 @@ public class CustomerDAOImpl extends BaseDAO<Customer> implements CustomerDAO {
 ## 8.1 JDBC 数据库连接池的必要性
 
 
-在使用开发基于数据库的web程序时，传统的模式基本是按以下步骤：　　
+在使用开发基于数据库的 web 程序时，传统的模式基本是按以下步骤：　　
 - **在主程序（如servlet、beans）中建立数据库连接**
 - **进行 sql 操作**
 - **断开数据库连接**
@@ -1427,15 +1426,16 @@ JDBC 的数据库连接池使用 javax.sql.DataSource 来表示，DataSource 只
   - **C3P0** 是一个开源组织提供的一个数据库连接池，**速度相对较慢，稳定性还可以。**hibernate官方推荐使用。
   - **Proxool** 是 SourceForge下 的一个开源项目数据库连接池，有监控连接池状态的功能，**稳定性较 c3p0 差一点**
   - **BoneCP** 是一个开源组织提供的数据库连接池，速度快。
-  - **Druid** 是阿里提供的数据库连接池，据说是集DBCP 、C3P0 、Proxool 优点于一身的数据库连接池，但是速度不确定是否有 BoneCP 快。
-- DataSource 通常被称为数据源，它包含连接池和连接池管理两个部分，习惯上也经常把 DataSource 称为连接池
-- **DataSource 用来取代 DriverManager 来获取 Connection，获取速度快，同时可以大幅度提高数据库访问速度。**
+  - **Druid** 是阿里提供的数据库连接池，监控做的很好。
+
+DataSource 通常被称为数据源，它包含连接池和连接池管理两个部分，习惯上也经常把 DataSource 称为连接池。
+**DataSource 用来取代 DriverManager 来获取 Connection，获取速度快，同时可以大幅度提高数据库访问速度。**
 
 目前使用较多的是 Druid。
 
 注意：
   - 数据源和数据库连接不同，数据源无需创建多个，它是产生数据库连接的工厂，因此**整个应用只需要一个数据源即可。**
-  - 当数据库访问结束后，程序还是像以前一样关闭数据库连接：conn.close(); 但conn.close()并没有关闭数据库的物理连接，它仅仅把数据库连接释放，归还给了数据库连接池。
+  - 当数据库访问结束后，程序还是像以前一样关闭数据库连接：conn.close(); 但 conn.close() 并没有关闭数据库的物理连接，它仅仅把数据库连接释放，归还给了数据库连接池。
 
 
 ### 8.3.1 C3P0 数据库连接池
@@ -1725,7 +1725,7 @@ ResultSetHandler 接口提供了一个单独的方法：Object handle (java.sql.
 | **MapHandler** | 将结果集中的第一行数据封装到一个Map里，key是列名，value就是对应的值 |
 | **MapListHandler：** | 将结果集中的每一行数据都封装到一个Map里，然后再存放到List |
 | **ScalarHandler：** | 查询单个值对象 |
-   
+
 
 测试
 
