@@ -116,9 +116,9 @@
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>LeetCode</tag>
         <tag>算法</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -147,28 +147,32 @@
 <p>之前用数组设计循环队列，里面为了判断元素位置，<code>front</code> 和 <code>last</code> 两个变量算来算去，很是糊涂。后来看了左程云老师的一节课，里面讲了下用数组实现循环队列，最主要的是，用<code>size</code>变量来实现了<code>front</code>和<code>last</code>两个指针的解耦，很清爽，总结一下。</p>
 <p>我们用数组实现循环队列。定义一个数组<code>arr</code>来记录数据，定义变量<code>size</code>来记录当前数组或者队列的元素个数。</p>
 <p>显然，当<code>size == arr.length</code>时，队列已经满了，就不能再添加元素了；当<code>size != arr.length</code>时，说明还有空位，可以新加元素。所以，我们是<strong>通过<code>size</code>和<code>arr.length</code>的关系来判断是否能添加元素</strong>。后续的工作就是维护好<code>size</code>这个重要的变量。</p>
-<p>此外，还需要定义<code>front</code>指针和<code>last</code>指针。<strong><code>front</code>指针永远指向队列头部的那个元素</strong>；<strong><code>last</code>指针永远指向队尾最后一个元素的后一个位置</strong>，也就是新元素待插入的位置。<br><br><br>有了<code>size</code>变量后，一切变得简单。</p>
+<p>此外，还需要定义<code>front</code>指针和<code>last</code>指针。<strong><code>front</code> 指针永远指向队列头部的那个元素；<code>last</code> 指针永远指向队尾最后一个元素的后一个位置，也就是新元素待插入的位置。</strong><br><br><br>有了<code>size</code>变量后，一切变得简单。</p>
 <ul>
 <li><p><code>enQueue(int value)</code>操作：因为 last 的位置就是新元素待插入的位置，因此直接将新元素放到last位置，维护 size。那么怎样维护 last 指针呢？有两种情况：</p>
 <ul>
-<li><p>情况 1：last 当前指向的不是数组最后一个位置，即 <code>last != arr.length - 1</code>，此时，直接 last++ 就好；</p>
+<li>情况 1：last 当前指向的不是数组最后一个位置，即 <code>last != arr.length - 1</code>，此时，直接 <code>last++</code> 就好；</li>
+</ul>
 </li>
-<li><p>情况 2：last 当前指向数组最后一个位置，即 <code>last == arr.length - 1</code>，此时，last 再往后的话就越界了，所以要从头开始，即 last = 0。</p>
+<li><p>情况 2：last 当前指向数组最后一个位置，即 <code>last == arr.length - 1</code>，此时，last 再往后的话就越界了，所以要从头开始，即 <code>last = 0</code>。</p>
 </li>
 </ul>
-<br>   
-</li>
+ <br>
+
+<ul>
 <li><p><code>deQueue()</code>操作：因为front指针指的就是队首元素，所以我们只需要后移 front 指针就可以实现出队操作，同时维护 size。这时也有两种情况：</p>
 <ul>
-<li><p>情况 1：front 不在数组最后位置，因为不在最后，所以可以放心的执行 front++；</p>
+<li><p>情况 1：front 不在数组最后位置，因为不在最后，所以可以放心的执行 <code>front++</code>；</p>
 </li>
 <li><p>情况 2：front 位于数组最后位置，即<code>front==arr.length - 1</code>，这时，front 后移的操作变成了 front 回到数组第一个位置，即<code>front = 0</code>。</p>
 </li>
 </ul>
-<br>
 </li>
-<li><p><code>Front()</code>操作：很简单，因为 front 指针永远指向队首元素，所以返回<code>arr[front]</code>即可。</p>
-</li>
+</ul>
+ <br>
+
+<ul>
+<li><code>Front()</code>操作：很简单，因为 front 指针永远指向队首元素，所以返回<code>arr[front]</code>即可。</li>
 </ul>
 <br>
 
@@ -200,7 +204,7 @@
 <p>我们还是通过<code>size</code>和<code>arr.length</code>的关系来判断是否能添加或者删除元素，实现 front 和 last 的解耦。</p>
 <ul>
 <li><code>insertFront()</code>操作：由于 front 是队首元素的位置，要在队首插入元素，就是要在 front 前面一个位置插入元素，这时候还是两种情况：<ul>
-<li>情况 1：front 不是指向数组第一个位置，这时候直接将新元素插入到 front - 1 位置即可，然后 front–，同时维护 size；</li>
+<li>情况 1：front 不是指向数组第一个位置，这时候直接将新元素插入到 front - 1 位置即可，然后 <code>front--</code>，同时维护 size；</li>
 <li>情况 2：front 指向数组最后一个位置，此时，要插入的元素位置应该是数组最后位置，即<code>arr.length - 1</code>位置，然后维护 front 和 size。</li>
 </ul>
 </li>
@@ -209,8 +213,8 @@
 
 <ul>
 <li><code>deleteLast()</code>操作：由于 last 指向队尾元素的后一个位置，所以从队尾删除元素，就是删除 last 前面那个元素，两种情况：<ul>
-<li>情况 1：last 不是指向数组第一个位置，此时直接维护 last– 即可；</li>
-<li>情况 2：last 指向数组第一个位置，这是 last 前面的元素就是数组最后一个位置的元素，这是，只需让 last 指向数组最后一个位置即可。</li>
+<li>情况 1：last 不是指向数组第一个位置，此时直接维护 <code>last--</code> 即可；</li>
+<li>情况 2：last 指向数组第一个位置，这是 last 前面的元素就是数组最后一个位置的元素，这时，只需让 last 指向数组最后一个位置即可。</li>
 </ul>
 </li>
 </ul>
@@ -238,9 +242,9 @@
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>LeetCode</tag>
         <tag>算法</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -868,8 +872,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>JDBC</tag>
         <tag>Java</tag>
+        <tag>JDBC</tag>
         <tag>数据库</tag>
       </tags>
   </entry>
