@@ -25,19 +25,22 @@ nodejs 官网上下载的安装包中包含 npm，在 Windows 系统下安装完
 
 **3. 设置环境变量**
 ① 将 node 路径加入环境变量。
-在 Path 中添加 `D:\Program Files\node\nodejs`。或者通过以下命令将 node路径 加入环境变量。
+在 Path 中添加 `D:\Program Files\node\nodejs`。或者通过以下命令将 node 路径 加入环境变量。
+
 ```
 setx PATH "%PATH%;D:\Program Files\node\nodejs
 ```
 
 ② 将 npm 的全局模块路径加入到环境变量。
 在 Path 中添加 `D:\Program Files\node\npm_prefix`，或者通过以下命令将 npm 全局模块路径加入环境变量 。
+
 ```
 setx PATH "%PATH%;D:\Program Files\node\npm_prefix
 ```
 <br>
 
 **4. 设置 npm 全局模块和缓存路径**
+
 ```
 npm config set prefix "D:\\Program Files\\node\\npm_prefix"
 npm config set cache "D:\\Program Files\\node\\npm_cache"
