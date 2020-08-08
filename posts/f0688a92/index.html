@@ -266,21 +266,7 @@
     </a>
   </span>
   
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>757</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
+  
 
         </div>
       </header>
@@ -299,42 +285,24 @@
 </blockquote>
 <p>用 HTTPS 方式总是需要输入用户名和密码； SSH 方式使用之前需要先配置密钥。</p>
 <p>查看当前本地仓库对应的远程仓库地址：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/Sningning/DataStructures.git (fetch)</span><br><span class="line">origin  https://github.com/Sningning/DataStructures.git (push)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https:&#x2F;&#x2F;github.com&#x2F;Sningning&#x2F;DataStructures.git (fetch)</span><br><span class="line">origin  https:&#x2F;&#x2F;github.com&#x2F;Sningning&#x2F;DataStructures.git (push)</span><br></pre></td></tr></table></figure>
 
 <p>切换为 SSH 通道：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote set-url origin git@github.com:Sningning/DataStructures.git</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote set-url origin git@github.com:Sningning&#x2F;DataStructures.git</span><br></pre></td></tr></table></figure>
 
 <p>再查看下，已经改为 SSH 通道了。</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  git@github.com:Sningning/DataStructures.git (fetch)</span><br><span class="line">origin  git@github.com:Sningning/DataStructures.git (push)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  git@github.com:Sningning&#x2F;DataStructures.git (fetch)</span><br><span class="line">origin  git@github.com:Sningning&#x2F;DataStructures.git (push)</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h1 id="2-测试-GitHub-连接"><a href="#2-测试-GitHub-连接" class="headerlink" title="2. 测试 GitHub 连接"></a>2. 测试 GitHub 连接</h1><blockquote>
 <p>2020.04.08</p>
 </blockquote>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h1 id="3-MySQL-5-7-及-8-0-配置驱动"><a href="#3-MySQL-5-7-及-8-0-配置驱动" class="headerlink" title="3.MySQL 5.7 及 8.0 配置驱动"></a>3.MySQL 5.7 及 8.0 配置驱动</h1><p>MySQL 5.7 及 8.0 不能用老版的<code>com.mysql.jdbc.Driver</code>驱动，需要换成<code>mysql.connector-java-8.0.20.jar</code>包中的<code>com.mysql.cj.jdbc.Driver</code>新版驱动。</p>
 <p>同时 url 还需要加入时区<code>jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai</code>。</p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
+
     </div>
 
     
@@ -530,16 +498,6 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Song Ningning</span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-area-chart"></i>
-    </span>
-    <span title="站点总字数">86k</span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-coffee"></i>
-    </span>
-    <span title="站点阅读时长">1:19</span>
 </div>
 
         
