@@ -37,7 +37,7 @@
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
     "hexo-symbols-count-time": "^0.7.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "prismjs": "^1.21.0"
   }
 }
